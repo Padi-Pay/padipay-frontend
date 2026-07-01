@@ -3,6 +3,7 @@ import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
+import { Footer } from "@/components/landing/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -72,6 +73,9 @@ export default function RootLayout({
         <main className="flex-1 w-full flex flex-col">
           {children}
         </main>
+        
+        {/* Global Footer */}
+        <Footer />
         
       </body>
     </html>
