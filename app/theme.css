@@ -1,0 +1,45 @@
+/* theme.css - Stitch Design System Variables */
+
+:root {
+  --background: #f9f9ff;
+  --on-background: #111c2d;
+  
+  --surface: #f9f9ff;
+  --surface-dim: #cfdaf2;
+  --surface-bright: #f9f9ff;
+  
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f0f3ff;
+  --surface-container: #e7eeff;
+  --surface-container-high: #dee8ff;
+  --surface-container-highest: #d8e3fb;
+  
+  --on-surface: #111c2d;
+  --on-surface-variant: #3e4a3d;
+  --surface-variant: #d8e3fb;
+  
+  /* Brand Colors from Design System Image */
+  --primary: #16A34A;
+  --primary-container: #DCFCE7;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #14532D;
+
+  --secondary: #F59E0B;
+  --secondary-container: #FEF3C7;
+  --on-secondary: #FFFFFF;
+  --on-secondary-container: #78350F;
+
+  --tertiary: #E85F81;
+  --tertiary-container: #FCE7F3;
+  --on-tertiary: #FFFFFF;
+  --on-tertiary-container: #831843;
+
+  --neutral: #1E293B;
+  --on-surface: #1E293B; /* Mapping Neutral to main text color */
+  
+  --outline: #94A3B8;
+  --outline-variant: #CBD5E1;
+  
+  /* We purposefully do NOT include a prefers-color-scheme: dark 
+     to enforce the bright, trustworthy institutional feel dictated by the Stitch design. */
+}
