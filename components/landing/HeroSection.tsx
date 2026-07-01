@@ -12,7 +12,9 @@ export function HeroSection() {
         className="absolute inset-0 pointer-events-none z-0" 
         style={{ 
           backgroundImage: "linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px)", 
-          backgroundSize: "48px 48px" 
+          backgroundSize: "48px 48px",
+          maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)"
         }} 
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
