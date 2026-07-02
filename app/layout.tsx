@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scroll-pt-24`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col selection:bg-primary/20 selection:text-primary">
         
         {/* Navigation */}
