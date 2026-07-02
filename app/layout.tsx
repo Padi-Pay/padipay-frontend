@@ -3,6 +3,7 @@ import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -43,6 +44,9 @@ export default function RootLayout({
         
         {/* Global Footer */}
         <Footer />
+        
+        {/* Floating Actions */}
+        <ScrollToTop />
         
       </body>
     </html>
