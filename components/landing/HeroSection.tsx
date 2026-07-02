@@ -52,7 +52,7 @@ export function HeroSection() {
 					transition={{ duration: 0.5, delay: 0.3 }}
 					className="flex flex-col sm:flex-row justify-center gap-4">
 					<Link
-						href="#technical-architecture"
+						href="/#technical-architecture"
 						className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 shadow-sm transition-all hover:scale-105 active:scale-95">
 						Explore Architecture <ArrowRight className="ml-2 w-5 h-5" />
 					</Link>

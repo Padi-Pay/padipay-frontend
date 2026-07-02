@@ -44,17 +44,17 @@ export function Navbar() {
 							{/* Desktop Navigation Links */}
 							<div className="hidden md:flex items-center space-x-6 h-full">
 								<Link
-									href="#how-it-works"
+									href="/#how-it-works"
 									className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
 									How it works
 								</Link>
 								<Link
-									href="#ecosystem"
+									href="/#ecosystem"
 									className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
 									Ecosystem
 								</Link>
 								{/* <Link
-									href="#status"
+									href="/#status"
 									className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
 									System Status
 								</Link> */}
@@ -74,9 +74,11 @@ export function Navbar() {
 								className="hidden sm:block text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
 								GitHub
 							</Link>
-							<button className="hidden md:block bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+							<Link 
+								href="/coming-soon"
+								className="hidden md:flex justify-center items-center bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
 								Get Started
-							</button>
+							</Link>
 
 							{/* Mobile Menu Toggle Button */}
 							<button
@@ -126,19 +128,19 @@ export function Navbar() {
 
 				<div className="px-4 py-6 space-y-2 flex flex-col grow overflow-y-auto">
 					<Link
-						href="#how-it-works"
+						href="/#how-it-works"
 						onClick={closeMenu}
 						className="block px-3 py-3 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-surface-variant transition-colors">
 						How it works
 					</Link>
 					<Link
-						href="#ecosystem"
+						href="/#ecosystem"
 						onClick={closeMenu}
 						className="block px-3 py-3 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-surface-variant transition-colors">
 						Ecosystem
 					</Link>
 					{/* <Link
-						href="#status"
+						href="/#status"
 						onClick={closeMenu}
 						className="block px-3 py-3 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-surface-variant transition-colors">
 						System Status
@@ -158,11 +160,12 @@ export function Navbar() {
 							className="sm:hidden block px-3 py-3 rounded-md text-base font-medium text-foreground/80 hover:text-foreground hover:bg-surface-variant transition-colors">
 							GitHub
 						</Link>
-						<button
+						<Link
+							href="/coming-soon"
 							onClick={closeMenu}
-							className="w-full bg-primary text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+							className="w-full flex justify-center items-center bg-primary text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
 							Get Started
-						</button>
+						</Link>
 					</div>
 				</div>
 			</div>
