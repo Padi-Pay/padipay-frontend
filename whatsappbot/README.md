@@ -5,8 +5,8 @@ Welcome to the **PadiPay WhatsApp Bot Gateway** repository!
 ## About PadiPay
 PadiPay is a decentralized, Web2.5 escrow service designed to empower everyday traders—like the hardworking wholesale pepper sellers at Mile 12 Market in Lagos—by providing them with secure, transparent, and easy-to-use escrow transactions directly from their mobile phones.
 
-## Purpose of this Repository
-This repository contains the Node.js/Express application that serves as the **WhatsApp Bot Gateway**.
+## Purpose of this Directory
+This directory contains the Node.js/Express application that serves as the **WhatsApp Bot Gateway**.
 
 ```text
   [ User Messages ]

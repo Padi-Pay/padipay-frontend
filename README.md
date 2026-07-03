@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/logo.png" alt="PadiPay Logo" width="200" />
+  <img src="./web/public/logo.png" alt="PadiPay Logo" width="200" />
 
   # PadiPay Ecosystem Portal
   
@@ -25,16 +25,15 @@ The **PadiPay Portal** is the public entry point to the PadiPay ecosystem—an M
 
 PadiPay leverages a modular architecture separating the conversational interface, the relayer infrastructure, and the on-chain settlement layer.
 
-![PadiPay Architecture](./public/architecture.png)
+![PadiPay Architecture](./web/public/architecture.png)
 
 ## The Ecosystem
 
 PadiPay is composed of several specialized, open-source repositories. We welcome contributions across the entire stack:
 
-- [**`whatsapp-bot-gateway`**](https://github.com/Padi-Pay/whatsappbot) — The conversational interface that abstracts blockchain complexity away from the end user.
 - [**`stellar-relayer-api`**](https://github.com/Padi-Pay/stellar-relayer-api) — High-performance bridge handling gasless transaction relays, fee-bumping, and Soroban event monitoring.
 - [**`soroban-escrow-contracts`**](https://github.com/Padi-Pay/contract) — Formally verified Rust contracts responsible for multi-party escrow logic and secure fund holding.
-- **`padipay-portal`** *(This Repository)* — The landing page and developer discovery hub.
+- **`padipay-frontend`** *(This Repository)* — Holds both the landing page/developer discovery hub (`/web`) and the conversational interface (`/whatsappbot`) that abstracts blockchain complexity away from the end user.
 - [**`padipay-platform`**](https://github.com/Padi-Pay/padipay-platform) — The meta-repository containing governance documents, architecture diagrams, roadmaps, and ecosystem standards.
 
 ## Technology Stack (Portal)
@@ -53,8 +52,8 @@ To run the PadiPay Portal locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Padi-Pay/padipay-portal.git
-   cd padipay-portal
+   git clone https://github.com/Padi-Pay/padipay-frontend.git
+   cd padipay-frontend/web
    ```
 
 2. **Install dependencies:**

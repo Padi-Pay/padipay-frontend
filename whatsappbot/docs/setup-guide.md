@@ -11,8 +11,8 @@ This guide will walk you through setting up the WhatsApp Bot Gateway locally and
 
 Clone the repository and install the dependencies:
 ```bash
-git clone <repo-url>
-cd whatsapp-bot-gateway
+git clone https://github.com/Padi-Pay/padipay-frontend.git
+cd padipay-frontend/whatsappbot
 npm install
 ```
 

@@ -6,10 +6,10 @@ import { Network, Webhook, FileCode2, Archive, Star, GitFork, ExternalLink } fro
 
 const repos = [
 	{
-		title: "WhatsApp Bot Gateway",
-		description: "A headless bridge between WhatsApp Business API and decentralized payment triggers.",
+		title: "Frontend & WhatsApp Gateway",
+		description: "The unified web portal and headless bridge between WhatsApp Business API and decentralized payment triggers.",
 		icon: Network,
-		url: "https://github.com/Padi-Pay/whatsappbot",
+		url: "https://github.com/Padi-Pay/padipay-frontend",
 	},
 	{
 		title: "Stellar Relayer API",
