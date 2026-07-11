@@ -1,6 +1,6 @@
-# PadiPay WhatsApp Bot Gateway Architecture
+# PadiPay WhatsApp Bot Architecture
 
-The PadiPay WhatsApp Bot Gateway provides the communication layer between WhatsApp users and the core PadiPay Relayer API. Its purpose is to receive incoming messages via webhooks, parse user intent, manage conversational state, communicate with the Relayer API to execute escrow actions, and dispatch appropriate text responses back to the user.
+The PadiPay WhatsApp Bot provides the communication layer between WhatsApp users and the core PadiPay Relayer API. Its purpose is to receive incoming messages via webhooks, parse user intent, manage conversational state, communicate with the Relayer API to execute escrow actions, and dispatch appropriate text responses back to the user.
 
 ## System Overview
 
@@ -15,7 +15,7 @@ The PadiPay WhatsApp Bot Gateway provides the communication layer between WhatsA
 +----------------------+-----------------------+
                        |
 +----------------------v-----------------------+
-| WhatsApp Bot Gateway (This Repo)             |
+| WhatsApp Bot (This Directory)                |
 | Webhook parsing, intent routing, state check |
 +----------------------+-----------------------+
                        |
@@ -128,7 +128,7 @@ User receives WhatsApp reply
 ## Project Organization
 
 ```text
-whatsapp-bot-gateway/
+whatsappbot/
 |-- src/
 |   |-- app.js
 |   |-- routes/

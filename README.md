@@ -12,7 +12,7 @@
 
 <br />
 
-The **PadiPay Portal** is the public entry point to the PadiPay ecosystem—an MVP-stage, open-source, WhatsApp-powered escrow platform built on Stellar Soroban. This repository serves as the central discovery hub for contributors, users, and ecosystem participants to understand our architecture, access developer resources, and explore the protocol.
+The **PadiPay Frontend** repository is the public entry point to the PadiPay ecosystem—an MVP-stage, open-source, WhatsApp-powered escrow platform built on Stellar Soroban. This repository serves as the central discovery hub for contributors, users, and ecosystem participants to understand our architecture, access developer resources, and explore the protocol.
 
 ## Key Capabilities
 
@@ -31,14 +31,14 @@ PadiPay leverages a modular architecture separating the conversational interface
 
 PadiPay is composed of several specialized, open-source repositories. We welcome contributions across the entire stack:
 
-- [**`stellar-relayer-api`**](https://github.com/Padi-Pay/stellar-relayer-api) — High-performance bridge handling gasless transaction relays, fee-bumping, and Soroban event monitoring.
-- [**`soroban-escrow-contracts`**](https://github.com/Padi-Pay/contract) — Formally verified Rust contracts responsible for multi-party escrow logic and secure fund holding.
+- [**`padipay-relayer-api`**](https://github.com/Padi-Pay/padipay-relayer-api) — High-performance bridge handling gasless transaction relays, fee-bumping, and Soroban event monitoring.
+- [**`padipay-contracts`**](https://github.com/Padi-Pay/padipay-contract) — Formally verified Rust contracts responsible for multi-party escrow logic and secure fund holding.
 - **`padipay-frontend`** *(This Repository)* — Holds both the landing page/developer discovery hub (`/web`) and the conversational interface (`/whatsappbot`) that abstracts blockchain complexity away from the end user.
-- [**`padipay-platform`**](https://github.com/Padi-Pay/padipay-platform) — The meta-repository containing governance documents, architecture diagrams, roadmaps, and ecosystem standards.
+- [**`padipay-docs`**](https://github.com/Padi-Pay/padipay-docs) — The meta-repository containing governance documents, architecture diagrams, roadmaps, and ecosystem standards.
 
-## Technology Stack (Portal)
+## Technology Stack (Frontend)
 
-This portal is built for speed, accessibility, and a premium user experience:
+This frontend is built for speed, accessibility, and a premium user experience:
 
 - **Framework:** Next.js (App Router)
 - **Styling:** Tailwind CSS
@@ -48,7 +48,7 @@ This portal is built for speed, accessibility, and a premium user experience:
 
 ## Local Development
 
-To run the PadiPay Portal locally:
+To run the PadiPay Frontend locally:
 
 1. **Clone the repository:**
    ```bash
@@ -74,7 +74,7 @@ To run the PadiPay Portal locally:
 
 We believe in open commerce. Whether you are a Rust smart contract engineer, a frontend developer, or a community mediator, there is a place for you in the PadiPay ecosystem.
 
-1. Check out the [**`padipay-platform`**](https://github.com/Padi-Pay/padipay-platform) repository for contribution guidelines, open bounties, and our ecosystem roadmap.
+1. Check out the [**`padipay-docs`**](https://github.com/Padi-Pay/padipay-docs) repository for contribution guidelines, open bounties, and our ecosystem roadmap.
 2. Fork the relevant repository.
 3. Create your feature branch (`git checkout -b feature/AmazingFeature`).
 4. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`).

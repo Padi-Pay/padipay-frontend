@@ -12,16 +12,16 @@ const repos = [
 		url: "https://github.com/Padi-Pay/padipay-frontend",
 	},
 	{
-		title: "Stellar Relayer API",
+		title: "PadiPay Relayer API",
 		description: "High-performance bridge optimizing transaction throughput and Soroban event monitoring.",
 		icon: Webhook,
-		url: "https://github.com/Padi-Pay/stellar-relayer-api",
+		url: "https://github.com/Padi-Pay/padipay-relayer-api",
 	},
 	{
-		title: "Soroban Escrow Contracts",
+		title: "PadiPay Contracts",
 		description: "Formally verified Rust contracts for multi-party agreement and secure fund holding.",
 		icon: FileCode2,
-		url: "https://github.com/Padi-Pay/contract",
+		url: "https://github.com/Padi-Pay/padipay-contract",
 	},
 	// {
 	// 	title: "Human Oracle Network",
@@ -40,12 +40,12 @@ const repos = [
 	// 	url: "",
 	// },
 	{
-		title: "Meta Repository",
+		title: "PadiPay Documentation",
 		description: "Global documentation, governance proposals, and the unified architectural specification.",
 		icon: Archive,
 		stars: 342,
 		forks: 45,
-		url: "https://github.com/Padi-Pay/padipay-platform",
+		url: "https://github.com/Padi-Pay/padipay-docs",
 	},
 ]
 

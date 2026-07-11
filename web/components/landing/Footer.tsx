@@ -8,13 +8,13 @@ const footerLinks = [
 		title: "Ecosystem",
 		links: [
 			{ name: "GitHub Org", href: "https://github.com/padi-pay" },
-			{ name: "Documentation", href: "https://github.com/Padi-Pay/padipay-platform" },
+			{ name: "Documentation", href: "https://github.com/Padi-Pay/padipay-docs" },
 		],
 	},
 	{
 		title: "Community",
 		links: [
-			{ name: "Roadmap", href: "https://github.com/Padi-Pay/padipay-platform/blob/main/ROADMAP.md" },
+			{ name: "Roadmap", href: "https://github.com/Padi-Pay/padipay-docs/blob/main/ROADMAP.md" },
 			// { name: "Bounties", href: "#" },
 			// { name: "Discourse", href: "#" },
 		],

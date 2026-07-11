@@ -1,6 +1,6 @@
 # Setup Guide
 
-This guide will walk you through setting up the WhatsApp Bot Gateway locally and testing webhooks.
+This guide will walk you through setting up the WhatsApp Bot locally and testing webhooks.
 
 ## Prerequisites
 - Node.js (v18 or higher recommended)

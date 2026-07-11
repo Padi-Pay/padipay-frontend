@@ -6,9 +6,9 @@ import { DeveloperResources } from "@/components/landing/DeveloperResources";
 
 async function getRepoStats() {
   const repoNames = [
-    "Padi-Pay/whatsappbot",
-    "Padi-Pay/stellar-relayer-api",
-    "Padi-Pay/contract"
+    "Padi-Pay/padipay-frontend",
+    "Padi-Pay/padipay-relayer-api",
+    "Padi-Pay/padipay-contract"
   ];
   
   const stats: Record<string, { stars: number; forks: number }> = {};
