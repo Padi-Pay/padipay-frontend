@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./web/public/logo.png" alt="PadiPay Logo" width="200" />
 
-  # PadiPay Ecosystem Portal
+  # PadiPay Frontend
   
   **"Trade with confidence, even with people you've never met."**
 
