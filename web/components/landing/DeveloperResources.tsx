@@ -1,36 +1,34 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  GitMerge, 
-  Map, 
-  Banknote, 
-  FileText, 
-  TerminalSquare, 
-  BadgeCheck 
+import {
+  GitMerge,
+  Map,
+  Banknote,
+  FileText,
+  TerminalSquare,
+  BadgeCheck
 } from "lucide-react";
 import Link from "next/link";
 
 const resources = [
-  { name: "Architecture", icon: GitMerge, href: "#" },
-  { name: "Roadmap", icon: Map, href: "#" },
-  { name: "Bounties", icon: Banknote, href: "#" },
-  { name: "Docs", icon: FileText, href: "#" },
-  { name: "Guides", icon: TerminalSquare, href: "#" },
-  { name: "Standards", icon: BadgeCheck, href: "#" },
+  { name: "Architecture", icon: GitMerge, href: "https://github.com/Padi-Pay/padipay-docs/blob/main/docs/architecture.md" },
+  { name: "Roadmap", icon: Map, href: "https://github.com/Padi-Pay/padipay-docs/blob/main/ROADMAP.md" },
+  { name: "Docs", icon: FileText, href: "https://github.com/Padi-Pay/padipay-docs" },
+  { name: "Standards", icon: BadgeCheck, href: "https://github.com/Padi-Pay/padipay-docs/blob/main/docs/contributing.md" },
 ];
 
 export function DeveloperResources() {
   return (
     <section className="py-24" style={{ backgroundColor: "#f1f0ff" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Top Section: Copy & Metrics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-          
+
           {/* Copy */}
           <div className="max-w-xl">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -38,7 +36,7 @@ export function DeveloperResources() {
             >
               Built with Developers, for the World.
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -50,7 +48,7 @@ export function DeveloperResources() {
           </div>
 
           {/* Metrics */}
-          <div className="flex gap-4 justify-start lg:justify-end flex-wrap">
+          {/* <div className="flex gap-4 justify-start lg:justify-end flex-wrap">
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -83,14 +81,14 @@ export function DeveloperResources() {
               <div className="text-[#006B2C] text-2xl font-bold mb-1">2M+</div>
               <div className="text-[#6E7B6C] text-xs font-semibold uppercase tracking-wide">TX VOL</div>
             </motion.div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Section: Resource Cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {resources.map((resource, index) => (
-            <Link key={resource.name} href={resource.href}>
-              <motion.div 
+            <Link key={resource.name} href={resource.href} target="_blank" rel="noopener noreferrer">
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
