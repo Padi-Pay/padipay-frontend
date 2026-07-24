@@ -4,6 +4,8 @@ import "./globals.css";
 import { Footer } from "@/components/landing/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { GlobalErrorBoundary } from "@/src/components/error/GlobalErrorBoundary";
+import { Providers } from "@/src/components/providers/Providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,21 +35,23 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scroll-pt-24`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col selection:bg-primary/20 selection:text-primary">
-        
-        {/* Navigation */}
-        <Navbar />
+        <GlobalErrorBoundary>
+          <Providers>
+            {/* Navigation */}
+            <Navbar />
 
-        {/* Main Content */}
-        <main className="flex-1 w-full flex flex-col">
-          {children}
-        </main>
-        
-        {/* Global Footer */}
-        <Footer />
-        
-        {/* Floating Actions */}
-        <ScrollToTop />
-        
+            {/* Main Content */}
+            <main className="flex-1 w-full flex flex-col">
+              {children}
+            </main>
+            
+            {/* Global Footer */}
+            <Footer />
+            
+            {/* Floating Actions */}
+            <ScrollToTop />
+          </Providers>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );
