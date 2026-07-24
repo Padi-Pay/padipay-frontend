@@ -43,7 +43,7 @@ export default function PrivacyPage() {
               3. Blockchain Immutaibility
             </h2>
             <p className="text-lg text-[#3E4A3D] leading-relaxed">
-              PadiPay's smart contracts are currently deployed to the Stellar Testnet. Transaction data and state related to escrows will be visible on the public ledger. Because blockchain data is immutable by design, users should not include sensitive personal information in transaction memos or escrow terms.
+              PadiPay&apos;s smart contracts are currently deployed to the Stellar Testnet. Transaction data and state related to escrows will be visible on the public ledger. Because blockchain data is immutable by design, users should not include sensitive personal information in transaction memos or escrow terms.
             </p>
           </section>
 

@@ -46,7 +46,7 @@ export default function NotFound() {
           Trade Link Not Found
         </h1>
         <p className="text-lg text-foreground/70">
-          Even in the best ecosystems, sometimes a connection gets dropped. Let's get you back to the PadiPay hub.
+          Even in the best ecosystems, sometimes a connection gets dropped. Let&apos;s get you back to the PadiPay hub.
         </p>
       </div>
 

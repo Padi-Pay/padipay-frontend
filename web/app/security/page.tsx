@@ -45,7 +45,7 @@ export default function SecurityPage() {
               3. Relayer API & Fee Sponsorship
             </h2>
             <p className="text-lg text-[#3E4A3D] leading-relaxed">
-              The PadiPay Relayer API abstracts away blockchain complexity and sponsors transaction fees for users. The API communicates with the Stellar network via secure endpoints. The Relayer architecture is designed so that it does not hold or require access to users' personal private keys for escrow interactions.
+              The PadiPay Relayer API abstracts away blockchain complexity and sponsors transaction fees for users. The API communicates with the Stellar network via secure endpoints. The Relayer architecture is designed so that it does not hold or require access to users&apos; personal private keys for escrow interactions.
             </p>
           </section>
 
