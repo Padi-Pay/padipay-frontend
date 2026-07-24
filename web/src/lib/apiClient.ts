@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { useGlobalStore } from '../store/globalStore';
 
 // Ensure we don't hardcode URLs
 const baseURL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -14,22 +15,10 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // Interceptors
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // TODO: In Phase 5 (Milestone 4/5), wire this to the Zustand store.
-    // For now, we leave the authorization injection structure ready.
     let token = null;
     
-    // Safely attempt to retrieve token if in browser (fallback before Zustand is wired)
     if (typeof window !== 'undefined') {
-      try {
-        // We will read from zustand persist storage or similar later
-        const persisted = localStorage.getItem('auth-storage');
-        if (persisted) {
-          const parsed = JSON.parse(persisted);
-          token = parsed?.state?.token;
-        }
-      } catch {
-        // ignore
-      }
+      token = useGlobalStore.getState().token;
     }
 
     if (token) {
@@ -49,9 +38,8 @@ apiClient.interceptors.response.use(
     // 1. Handle 401 Unauthorized centrally
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        // TODO: In Phase 5, wire this to Zustand's logout() to clear state
-        localStorage.removeItem('auth-storage');
-        // Clear other local storage entries owned by the app if needed
+        // Global logout which clears Zustand state and persisted storage
+        useGlobalStore.getState().logout();
         
         // Redirect to login
         window.location.href = '/login?sessionExpired=true';
