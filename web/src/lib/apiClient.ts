@@ -12,6 +12,8 @@ export const apiClient = axios.create({
 // Helper for delay in retry
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+let isRedirecting = false;
+
 // Interceptors
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -37,7 +39,8 @@ apiClient.interceptors.response.use(
 
     // 1. Handle 401 Unauthorized centrally
     if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && !isRedirecting) {
+        isRedirecting = true;
         // Global logout which clears Zustand state and persisted storage
         useGlobalStore.getState().logout();
         
