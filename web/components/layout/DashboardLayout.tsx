@@ -28,6 +28,17 @@ export function DashboardLayout({
   const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen);
   const closeMobileSidebar = () => setIsMobileOpen(false);
 
+  useEffect(() => {
+    if (!isMobileOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeMobileSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileOpen]);
+
   const headerElement = isValidElement(header)
     ? cloneElement(header as React.ReactElement<{ onToggleMobileSidebar?: () => void; isMobileOpen?: boolean }>, {
         onToggleMobileSidebar: toggleMobileSidebar,
