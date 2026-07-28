@@ -68,7 +68,7 @@ export function useBreadcrumbs(pathnameOverride?: string) {
     segments.forEach((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join('/')}`;
       const isCurrent = index === segments.length - 1;
-      let label = formatSegment(segment);
+      const label = formatSegment(segment);
 
       breadcrumbs.push({
         label,
