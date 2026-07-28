@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Wallet, ArrowLeftRight, User, X } from 'lucide-react';
 
 export interface SidebarProps {
@@ -15,6 +16,15 @@ export const navItems = [
 ];
 
 export function Sidebar({ onCloseMobileSidebar }: SidebarProps) {
+  const pathname = usePathname();
+
+  const isLinkActive = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <div className="flex flex-col h-full bg-surface">
       {/* Header / Logo */}
@@ -41,14 +51,21 @@ export function Sidebar({ onCloseMobileSidebar }: SidebarProps) {
       <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
+          const active = isLinkActive(item.href);
+
           return (
             <Link
               key={item.name}
               href={item.href}
               onClick={onCloseMobileSidebar}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-foreground/70 hover:text-foreground hover:bg-surface-container"
+              aria-current={active ? 'page' : undefined}
+              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                active
+                  ? 'bg-primary text-white font-semibold shadow-sm'
+                  : 'text-foreground/70 hover:text-foreground hover:bg-surface-container'
+              }`}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : ''}`} />
               <span>{item.name}</span>
             </Link>
           );
