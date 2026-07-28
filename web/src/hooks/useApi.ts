@@ -49,7 +49,9 @@ export function useApi<T = unknown>() {
       }
 
       if (axios.isAxiosError(e)) {
-        if (options.showToastOnError) {
+        const status = e.response?.status;
+
+        if (options.showToastOnError && status !== 401) {
           const message = (e.response?.data as { message?: string })?.message || e.message || 'An unexpected error occurred';
           if (!e.response) {
             toast.error('Network error. Please check your connection.');
@@ -61,7 +63,7 @@ export function useApi<T = unknown>() {
 
       // To make React Error Boundaries effective for async operations, 
       // we must throw the error during the render cycle.
-      if (options.throwOnError && isMounted.current) {
+      if (options.throwOnError && isMounted.current && !(axios.isAxiosError(e) && e.response?.status === 401)) {
         setRenderError(err);
       } else if (!axios.isAxiosError(e) && isMounted.current) {
         // Unexpected runtime errors should always crash the tree (caught by GlobalErrorBoundary)

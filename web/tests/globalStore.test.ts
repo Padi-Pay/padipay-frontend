@@ -4,7 +4,13 @@ import { useGlobalStore } from '../src/store/globalStore';
 describe('globalStore', () => {
   beforeEach(() => {
     localStorage.clear();
-    useGlobalStore.setState({ token: null, isAuthenticated: false, profile: null });
+    useGlobalStore.setState({
+      token: null,
+      isAuthenticated: false,
+      profile: null,
+      sessionExpired: false,
+      isHydrated: true,
+    });
   });
 
   it('handles login and logout correctly', () => {

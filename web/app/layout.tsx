@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Footer } from "@/components/landing/Footer";
-import { Navbar } from "@/components/layout/Navbar";
-import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { AppChrome } from "@/components/layout/AppChrome";
 import { GlobalErrorBoundary } from "@/src/components/error/GlobalErrorBoundary";
 import { Providers } from "@/src/components/providers/Providers";
 
@@ -37,19 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col selection:bg-primary/20 selection:text-primary">
         <GlobalErrorBoundary>
           <Providers>
-            {/* Navigation */}
-            <Navbar />
-
-            {/* Main Content */}
-            <main className="flex-1 w-full flex flex-col">
-              {children}
-            </main>
-            
-            {/* Global Footer */}
-            <Footer />
-            
-            {/* Floating Actions */}
-            <ScrollToTop />
+            <AppChrome>{children}</AppChrome>
           </Providers>
         </GlobalErrorBoundary>
       </body>

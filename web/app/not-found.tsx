@@ -1,109 +1,39 @@
-"use client";
+import { EmptyState } from '@/components/ui/EmptyState';
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { Unlink, Home, Code, FileText, Code2 } from "lucide-react";
+function NotFoundIllustration() {
+  return (
+    <svg viewBox="0 0 520 420" className="h-full w-full" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="notfound-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#16A34A" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.15" />
+        </linearGradient>
+      </defs>
+      <rect x="40" y="40" width="440" height="340" rx="32" fill="url(#notfound-bg)" />
+      <path d="M136 262l72-82 62 58 58-72 66 88" stroke="#16A34A" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="178" cy="154" r="16" fill="#F59E0B" fillOpacity="0.65" />
+      <circle cx="336" cy="118" r="24" fill="#E85F81" fillOpacity="0.25" />
+      <path d="M384 282c0 28-26 50-58 50s-58-22-58-50 26-50 58-50 58 22 58 50Z" fill="#fff" fillOpacity="0.95" />
+      <path d="M304 282h40" stroke="#16A34A" strokeWidth="14" strokeLinecap="round" />
+      <path d="M324 262v40" stroke="#16A34A" strokeWidth="14" strokeLinecap="round" />
+      <circle cx="264" cy="188" r="12" fill="#111C2D" fillOpacity="0.3" />
+      <circle cx="360" cy="220" r="12" fill="#111C2D" fillOpacity="0.3" />
+    </svg>
+  );
+}
 
 export default function NotFound() {
   return (
-    <div 
-      className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 sm:px-6 lg:px-8 relative overflow-hidden"
-      style={{
-        background: 'radial-gradient(circle at 15% 15%, rgba(22, 163, 74, 0.04) 0%, transparent 40%), var(--background)'
-      }}
-    >
-      
-      {/* 404 Hero Graphic */}
-      <div className="flex items-center justify-center mb-12 relative select-none">
-        <span className="text-[180px] font-extrabold text-surface-variant leading-none tracking-tighter">
-          4
-        </span>
-        
-        {/* Floating Broken Link Card (The '0') */}
-        <motion.div 
-          animate={{ 
-            y: [-10, 10, -10],
-            rotate: [-2, 2, -2]
-          }}
-          transition={{ 
-            duration: 6, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
-          }}
-          className="w-32 h-32 md:w-40 md:h-40 mx-2 bg-white rounded-3xl shadow-2xl flex items-center justify-center border border-outline-variant/30 z-10"
-        >
-          <Unlink className="w-16 h-16 md:w-20 md:h-20 text-primary opacity-80" strokeWidth={2.5} />
-        </motion.div>
-
-        <span className="text-[180px] font-extrabold text-surface-variant leading-none tracking-tighter -ml-2">
-          4
-        </span>
-      </div>
-
-      {/* Typography */}
-      <div className="text-center max-w-2xl mx-auto mb-10 z-10">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-          Trade Link Not Found
-        </h1>
-        <p className="text-lg text-foreground/70">
-          Even in the best ecosystems, sometimes a connection gets dropped. Let&apos;s get you back to the PadiPay hub.
-        </p>
-      </div>
-
-      {/* CTA Buttons */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-16 z-10">
-        <Link 
-          href="/"
-          className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <Home className="w-5 h-5" />
-          Back to Home
-        </Link>
-        <Link 
-          href="/#architecture"
-          className="flex items-center justify-center gap-2 bg-white border border-outline-variant text-foreground/80 px-6 py-3 rounded-lg text-base font-semibold hover:bg-surface-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <Code className="w-5 h-5 text-foreground/60" />
-          Explore Architecture
-        </Link>
-      </div>
-
-      {/* Helper Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl z-10 mb-12">
-        
-        {/* Documentation Card */}
-        <Link 
-          href="/docs"
-          className="bg-white border border-outline-variant rounded-2xl p-6 flex items-start gap-4 hover:border-primary/50 hover:shadow-md transition-all group"
-        >
-          <div className="p-3 bg-primary/10 rounded-xl">
-            <FileText className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-foreground mb-1">Documentation</h3>
-            <p className="text-sm text-foreground/70 leading-relaxed">
-              Learn how our open-source payment protocols work.
-            </p>
-          </div>
-        </Link>
-
-        {/* GitHub Card */}
-        <Link 
-          href="https://github.com/padipay"
-          target="_blank"
-          className="bg-white border border-outline-variant rounded-2xl p-6 flex items-start gap-4 hover:border-tertiary/50 hover:shadow-md transition-all group"
-        >
-          <div className="p-3 bg-tertiary/10 rounded-xl">
-            <Code2 className="w-6 h-6 text-tertiary group-hover:scale-110 transition-transform" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-foreground mb-1">GitHub Repository</h3>
-            <p className="text-sm text-foreground/70 leading-relaxed">
-              Contribute to the ecosystem or report a broken link.
-            </p>
-          </div>
-        </Link>
-
+    <div className="min-h-[calc(100vh-4rem)] px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <EmptyState
+          eyebrow="404"
+          title="Page not found"
+          description="The route you requested does not exist, but the rest of the platform is still here. Head back home or return to the dashboard."
+          illustration={<NotFoundIllustration />}
+          primaryAction={{ label: 'Go Home', href: '/' }}
+          secondaryAction={{ label: 'Return to Dashboard', href: '/dashboard' }}
+        />
       </div>
     </div>
   );
