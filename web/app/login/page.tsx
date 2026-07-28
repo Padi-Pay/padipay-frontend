@@ -1,16 +1,26 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { KeyRound, ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { UnauthenticatedRoute } from '@/components/auth/UnauthenticatedRoute';
+import { AuthLayout } from '@/components/auth/AuthLayout';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
+import { TextInput } from '@/components/forms/TextInput';
+import { PasswordInput } from '@/components/forms/PasswordInput';
 import { useGlobalStore } from '@/src/store/globalStore';
+import { apiClient } from '@/src/lib/apiClient';
+import { loginSchema, LoginFormData } from '@/lib/validations/auth.schema';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import { isAxiosError } from 'axios';
 
 function getSafeRedirectTarget(redirectParam: string | null) {
   if (redirectParam && redirectParam.startsWith('/')) {
     return redirectParam;
   }
-
   return '/dashboard';
 }
 
@@ -25,7 +35,6 @@ export default function LoginPage() {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const redirectTarget = useMemo(
     () => getSafeRedirectTarget(searchParams?.get('redirect')),
@@ -34,110 +43,94 @@ function LoginForm() {
 
   const sessionExpired = searchParams?.get('sessionExpired') === 'true';
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSubmitting(true);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    useGlobalStore.getState().login('demo-access-token');
-    useGlobalStore.getState().setProfile({
-      id: 'user_001',
-      email: 'ade@padipay.io',
-      name: 'PadiPay Operator',
-    });
-
-    router.replace(redirectTarget);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await apiClient.post('/api/auth/login', data);
+      const { token, user } = response.data;
+      
+      if (token && user) {
+        useGlobalStore.getState().login(token);
+        useGlobalStore.getState().setProfile(user);
+        router.replace(redirectTarget);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setError('password', { type: 'manual', message: 'Invalid credentials' });
+        } else {
+          toast.error(error.response?.data?.message || 'Login failed');
+        }
+      } else {
+        toast.error('Login failed');
+      }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(22,163,74,0.08),transparent_42%),linear-gradient(180deg,#f8fbff_0%,#eef5ff_100%)] px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl items-center gap-8 lg:grid-cols-[1fr_1fr]">
-        <div className="space-y-8 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 rounded-full border border-outline-variant bg-white/80 px-4 py-2 text-sm font-semibold text-foreground/70 shadow-sm backdrop-blur">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            Secure access to the dashboard
-          </div>
+    <AuthLayout
+      marketingTitle="Sign in to PadiPay"
+      marketingDescription="Continue into the privileged dashboard, review escrow activity, and pick up exactly where you left off."
+      features={['Escrow operations', 'Wallet management', 'Session recovery']}
+      containerClassName="bg-[radial-gradient(circle_at_top,rgba(22,163,74,0.08),transparent_42%),linear-gradient(180deg,#f8fbff_0%,#eef5ff_100%)]"
+    >
+      <h2 className="mb-2 text-2xl font-bold text-foreground">Welcome back</h2>
+      <p className="mb-6 text-sm text-foreground/60">
+        Authenticate to continue into your workspace.
+      </p>
 
-          <div className="space-y-4">
-            <h1 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl">
-              Sign in to PadiPay
-            </h1>
-            <p className="max-w-xl text-lg leading-8 text-foreground/70">
-              Continue into the privileged dashboard, review escrow activity, and pick up exactly where you left off.
-            </p>
-          </div>
-
-          <div className="mx-auto flex max-w-xl flex-wrap justify-center gap-3 lg:mx-0 lg:justify-start">
-            {['Escrow operations', 'Wallet management', 'Session recovery'].map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-outline-variant bg-white/80 px-4 py-2 text-sm font-medium text-foreground/65 shadow-sm"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
+      {sessionExpired && (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Your previous session expired. Please log in again.
         </div>
+      )}
 
-        <div className="relative">
-          <div className="absolute inset-0 -z-10 rounded-[2rem] bg-primary/10 blur-3xl" />
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-[2rem] border border-outline-variant/60 bg-white/90 p-6 shadow-[0_24px_70px_rgba(17,28,45,0.08)] backdrop-blur sm:p-8"
-          >
-            <div className="mb-8 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <KeyRound className="h-6 w-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">Welcome back</h2>
-                <p className="text-sm text-foreground/60">
-                  Authenticate to continue into your workspace.
-                </p>
-              </div>
-            </div>
-
-            {sessionExpired ? (
-              <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                Your previous session expired. Please log in again.
-              </div>
-            ) : null}
-
-            <div className="space-y-4">
-              <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-foreground/70">Email</span>
-                <input
-                  type="email"
-                  defaultValue="ade@padipay.io"
-                  className="w-full rounded-2xl border border-outline-variant bg-white px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-foreground/70">Password</span>
-                <input
-                  type="password"
-                  defaultValue="password"
-                  className="w-full rounded-2xl border border-outline-variant bg-white px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-80"
-            >
-              {isSubmitting ? 'Signing in...' : 'Continue to dashboard'}
-              <ArrowRight className="h-4 w-4" />
-            </button>
-
-            <p className="mt-4 text-center text-sm text-foreground/60">
-              You will be returned to{' '}
-              <span className="font-semibold text-foreground">{redirectTarget}</span> after successful login.
-            </p>
-          </form>
-        </div>
+      <GoogleSignInButton redirectTarget={redirectTarget} />
+      
+      <div className="my-6 flex items-center text-sm text-foreground/40 before:mt-0.5 before:flex-1 before:border-t before:border-outline-variant after:mt-0.5 after:flex-1 after:border-t after:border-outline-variant">
+        <span className="mx-4 text-xs uppercase tracking-wider font-medium">Or</span>
       </div>
-    </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <TextInput
+          label="Email"
+          type="email"
+          placeholder="ade@padipay.io"
+          {...register('email')}
+          error={errors.email?.message}
+        />
+
+        <PasswordInput
+          label="Password"
+          placeholder="••••••••"
+          {...register('password')}
+          error={errors.password?.message}
+        />
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-80"
+        >
+          {isSubmitting ? 'Signing in...' : 'Continue to dashboard'}
+          <ArrowRight className="h-4 w-4" />
+        </button>
+
+        <p className="mt-4 text-center text-sm text-foreground/60">
+          Don&apos;t have an account?{' '}
+          <Link href={`/register?redirect=${encodeURIComponent(redirectTarget)}`} className="font-semibold text-primary hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 }
