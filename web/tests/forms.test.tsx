@@ -10,7 +10,7 @@ import { CurrencyInput } from "../components/forms/CurrencyInput";
 
 const dummySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  amount: z.number({ invalid_type_error: "Amount is required" }).positive("Amount must be greater than zero"),
+  amount: z.number({ message: "Amount is required" }).positive("Amount must be greater than zero"),
 });
 
 type DummyFormData = z.infer<typeof dummySchema>;

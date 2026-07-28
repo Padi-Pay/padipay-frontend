@@ -24,21 +24,15 @@ function ProtectedRouteInner({ children }: ProtectedRouteProps) {
 
     const persistedToken = readPersistedAuthToken();
 
-    if (isAuthenticated && !persistedToken) {
-      useGlobalStore.getState().logout();
+    if (!isAuthenticated || !persistedToken) {
+      if (isAuthenticated) {
+        useGlobalStore.getState().logout();
+      }
       const query = searchParams?.toString();
       const currentPath = query ? `${pathname}?${query}` : pathname;
       router.replace(`/login?redirect=${encodeURIComponent(currentPath || '/dashboard')}`);
       return;
     }
-
-    if (isAuthenticated) {
-      return;
-    }
-
-    const query = searchParams?.toString();
-    const currentPath = query ? `${pathname}?${query}` : pathname;
-    router.replace(`/login?redirect=${encodeURIComponent(currentPath || '/dashboard')}`);
   }, [isAuthenticated, isHydrated, pathname, router, searchParams, sessionExpired]);
 
   if (!isHydrated || !isAuthenticated || sessionExpired) {
