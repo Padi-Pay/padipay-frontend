@@ -5,6 +5,7 @@ export interface UserProfile {
   id: string;
   email: string;
   name: string;
+  avatarUrl?: string;
 }
 
 export const AUTH_STORAGE_KEY = 'auth-storage';
