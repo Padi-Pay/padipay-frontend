@@ -12,19 +12,19 @@ export function DashboardLayout({ children, header, sidebar }: DashboardLayoutPr
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
       {/* Sidebar container */}
-      <aside className="w-[280px] shrink-0 border-r border-outline-variant bg-surface">
+      <aside className="w-[280px] shrink-0 border-r border-outline-variant bg-surface overflow-y-auto">
         {sidebar}
       </aside>
 
       {/* Main layout container */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex flex-1 flex-col h-full min-w-0 overflow-hidden">
         {/* Header container */}
-        <header className="w-full border-b border-outline-variant bg-surface">
+        <header className="shrink-0 w-full border-b border-outline-variant bg-surface">
           {header}
         </header>
 
-        {/* Content container */}
-        <main className="flex-1 p-6">
+        {/* Content container with dedicated vertical scrollbar to prevent double scrollbars */}
+        <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
       </div>
