@@ -8,7 +8,7 @@ export interface HeaderProps {
 
 export function Header({ onToggleMobileSidebar }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-4 sm:px-6 bg-surface border-b border-outline-variant/60">
+    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-4 sm:px-6 bg-surface/80 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
       <div className="flex items-center gap-3">
         {onToggleMobileSidebar && (
           <button
