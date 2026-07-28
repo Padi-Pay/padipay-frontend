@@ -11,8 +11,8 @@ export interface DashboardLayoutProps {
 export function DashboardLayout({ children, header, sidebar }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
-      {/* Sidebar container */}
-      <aside className="w-[280px] shrink-0 border-r border-outline-variant bg-surface overflow-y-auto">
+      {/* Desktop Sidebar container - hidden on <1024px (lg breakpoint) */}
+      <aside className="hidden lg:block w-[280px] shrink-0 border-r border-outline-variant bg-surface overflow-y-auto">
         {sidebar}
       </aside>
 
