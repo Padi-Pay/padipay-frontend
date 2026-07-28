@@ -1,9 +1,19 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { User, Loader2 } from 'lucide-react';
+import { User, Loader2, CheckCircle2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useGlobalStore, UserProfile } from '@/src/store/globalStore';
 import { apiClient } from '@/src/lib/apiClient';
+import { TextInput } from '@/components/forms/TextInput';
+
+export const profileSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required'),
+});
+
+export type ProfileFormData = z.infer<typeof profileSchema>;
 
 export function ProfileView() {
   const profile = useGlobalStore((state) => state.profile);
@@ -11,6 +21,25 @@ export function ProfileView() {
 
   const [isLoading, setIsLoading] = useState(!profile);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: profile?.name || '',
+    },
+  });
+
+  useEffect(() => {
+    if (profile?.name) {
+      reset({ name: profile.name });
+    }
+  }, [profile?.name, reset]);
 
   useEffect(() => {
     let isMounted = true;
@@ -21,6 +50,7 @@ export function ProfileView() {
         const response = await apiClient.get<UserProfile>('/api/users/me');
         if (isMounted && response.data) {
           setProfile(response.data);
+          reset({ name: response.data.name || '' });
         }
       } catch (err: unknown) {
         if (isMounted) {
@@ -41,7 +71,11 @@ export function ProfileView() {
     return () => {
       isMounted = false;
     };
-  }, [setProfile]);
+  }, [setProfile, reset]);
+
+  const onUpdateProfile = async (data: ProfileFormData) => {
+    setSuccessMessage('Profile updated successfully');
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -56,26 +90,57 @@ export function ProfileView() {
       </div>
 
       <div className="bg-surface rounded-2xl border border-outline-variant/60 p-6 sm:p-8 shadow-xs">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Personal Information</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-6">Personal Information</h2>
+        
         {isLoading ? (
           <div className="flex items-center gap-2 py-8 text-foreground/70 justify-center">
             <Loader2 className="w-5 h-5 animate-spin text-primary" />
             <span>Loading profile details...</span>
           </div>
-        ) : fetchError ? (
-          <div className="p-4 rounded-xl bg-error/10 text-error text-sm mb-4">
-            {fetchError}
-          </div>
         ) : (
-          <div className="space-y-4">
-            <div>
-              <span className="text-xs font-semibold uppercase text-foreground/60">Full Name</span>
-              <p className="text-base font-medium text-foreground">{profile?.name || '—'}</p>
-            </div>
-            <div>
-              <span className="text-xs font-semibold uppercase text-foreground/60">Email Address</span>
-              <p className="text-base font-medium text-foreground">{profile?.email || '—'}</p>
-            </div>
+          <div className="space-y-6">
+            {fetchError && (
+              <div className="p-4 rounded-xl bg-error/10 text-error text-sm">
+                {fetchError}
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="flex items-center gap-2 p-4 rounded-xl bg-emerald-500/10 text-emerald-600 text-sm">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>{successMessage}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onUpdateProfile)} className="space-y-6 max-w-lg">
+              <div>
+                <label className="block text-xs font-semibold uppercase text-foreground/60 mb-1.5">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  disabled
+                  value={profile?.email || ''}
+                  className="flex h-10 w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500 cursor-not-allowed"
+                />
+              </div>
+
+              <TextInput
+                label="Full Name"
+                placeholder="Enter your full name"
+                error={errors.name?.message}
+                {...register('name')}
+              />
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                <span>Save Changes</span>
+              </button>
+            </form>
           </div>
         )}
       </div>
