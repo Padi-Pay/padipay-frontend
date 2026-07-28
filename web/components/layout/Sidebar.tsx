@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Wallet, ArrowLeftRight, User, X, LogOut } from 'lucide-react';
+import { useGlobalStore, AUTH_STORAGE_KEY } from '@/src/store/globalStore';
 
 export interface SidebarProps {
   onCloseMobileSidebar?: () => void;
@@ -18,12 +19,35 @@ export const navItems = [
 
 export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const logout = useGlobalStore((state) => state.logout);
 
   const isLinkActive = (href: string) => {
     if (href === '/dashboard') {
       return pathname === '/dashboard';
     }
     return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
+  const handleLogout = () => {
+    logout();
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.removeItem(AUTH_STORAGE_KEY);
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+      } catch {
+        // ignore storage errors in restrictive environments
+      }
+    }
+
+    if (onLogout) {
+      onLogout();
+    } else if (typeof window !== 'undefined') {
+      window.location.replace('/login');
+    } else {
+      router.replace('/login');
+    }
   };
 
   return (
@@ -77,7 +101,7 @@ export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
       <div className="p-4 border-t border-outline-variant/60">
         <button
           type="button"
-          onClick={onLogout}
+          onClick={handleLogout}
           className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium text-error hover:bg-error/10 transition-colors"
           data-testid="logout-btn"
         >
