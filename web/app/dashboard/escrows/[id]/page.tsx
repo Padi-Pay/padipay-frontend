@@ -2,11 +2,11 @@ import { notFound } from 'next/navigation';
 import { CircleAlert, FileText, ShieldCheck } from 'lucide-react';
 
 interface EscrowDetailsPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
-  const { id } = params;
+export default async function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
+  const { id } = await params;
 
   if (!id) {
     notFound();
