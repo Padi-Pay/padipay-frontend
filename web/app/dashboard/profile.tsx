@@ -76,13 +76,27 @@ export function ProfileView() {
   const onUpdateProfile = async (data: ProfileFormData) => {
     setFetchError(null);
     setSuccessMessage(null);
+
+    // Save previous state for potential rollback
+    const previousProfile = useGlobalStore.getState().profile;
+
+    // 1. Optimistically update state so Header immediately reflects new name
+    const optimisticProfile: UserProfile = previousProfile
+      ? { ...previousProfile, name: data.name }
+      : { id: 'temp-id', email: '', name: data.name };
+    
+    setProfile(optimisticProfile);
+
     try {
       const response = await apiClient.patch<UserProfile>('/api/users/me', data);
       if (response.data) {
         setProfile(response.data);
-        setSuccessMessage('Profile updated successfully');
       }
+      setSuccessMessage('Profile updated successfully');
     } catch (err: unknown) {
+      // Rollback optimistic update on failure
+      setProfile(previousProfile);
+
       const message = err && typeof err === 'object' && 'response' in err
         ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
         : null;
