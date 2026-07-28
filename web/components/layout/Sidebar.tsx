@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Wallet, ArrowLeftRight, User, X } from 'lucide-react';
+import { LayoutDashboard, Wallet, ArrowLeftRight, User, X, LogOut } from 'lucide-react';
 
 export interface SidebarProps {
   onCloseMobileSidebar?: () => void;
+  onLogout?: () => void;
 }
 
 export const navItems = [
@@ -15,7 +16,7 @@ export const navItems = [
   { name: 'Profile', href: '/dashboard/profile', icon: User },
 ];
 
-export function Sidebar({ onCloseMobileSidebar }: SidebarProps) {
+export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
   const pathname = usePathname();
 
   const isLinkActive = (href: string) => {
@@ -71,6 +72,19 @@ export function Sidebar({ onCloseMobileSidebar }: SidebarProps) {
           );
         })}
       </nav>
+
+      {/* Logout Footer Section */}
+      <div className="p-4 border-t border-outline-variant/60">
+        <button
+          type="button"
+          onClick={onLogout}
+          className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium text-error hover:bg-error/10 transition-colors"
+          data-testid="logout-btn"
+        >
+          <LogOut className="w-4 h-4 shrink-0" />
+          <span>Logout</span>
+        </button>
+      </div>
     </div>
   );
 }
