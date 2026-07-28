@@ -74,7 +74,20 @@ export function ProfileView() {
   }, [setProfile, reset]);
 
   const onUpdateProfile = async (data: ProfileFormData) => {
-    setSuccessMessage('Profile updated successfully');
+    setFetchError(null);
+    setSuccessMessage(null);
+    try {
+      const response = await apiClient.patch<UserProfile>('/api/users/me', data);
+      if (response.data) {
+        setProfile(response.data);
+        setSuccessMessage('Profile updated successfully');
+      }
+    } catch (err: unknown) {
+      const message = err && typeof err === 'object' && 'response' in err
+        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+        : null;
+      setFetchError(message || 'Failed to update profile. Please try again.');
+    }
   };
 
   return (
