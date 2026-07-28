@@ -1,14 +1,40 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState, cloneElement, isValidElement } from 'react';
 
 export interface DashboardLayoutProps {
   children: ReactNode;
   header?: ReactNode;
   sidebar?: ReactNode;
+  isMobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
 }
 
-export function DashboardLayout({ children, header, sidebar }: DashboardLayoutProps) {
+export function DashboardLayout({
+  children,
+  header,
+  sidebar,
+  isMobileOpen: controlledIsMobileOpen,
+  onMobileOpenChange,
+}: DashboardLayoutProps) {
+  const [uncontrolledIsMobileOpen, setUncontrolledIsMobileOpen] = useState(false);
+
+  const isMobileOpen = controlledIsMobileOpen ?? uncontrolledIsMobileOpen;
+  const setIsMobileOpen = (open: boolean) => {
+    setUncontrolledIsMobileOpen(open);
+    onMobileOpenChange?.(open);
+  };
+
+  const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen);
+  const closeMobileSidebar = () => setIsMobileOpen(false);
+
+  const headerElement = isValidElement(header)
+    ? cloneElement(header as React.ReactElement<{ onToggleMobileSidebar?: () => void; isMobileOpen?: boolean }>, {
+        onToggleMobileSidebar: toggleMobileSidebar,
+        isMobileOpen,
+      })
+    : header;
+
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
       {/* Desktop Sidebar container - hidden on <1024px (lg breakpoint) */}
@@ -20,7 +46,7 @@ export function DashboardLayout({ children, header, sidebar }: DashboardLayoutPr
       <div className="flex flex-1 flex-col h-full min-w-0 overflow-hidden">
         {/* Header container */}
         <header className="shrink-0 w-full border-b border-outline-variant bg-surface">
-          {header}
+          {headerElement}
         </header>
 
         {/* Content container with dedicated vertical scrollbar to prevent double scrollbars */}
