@@ -25,7 +25,7 @@ export function DashboardLayout({
     onMobileOpenChange?.(open);
   }, [onMobileOpenChange]);
 
-  const toggleMobileSidebar = useCallback(() => setIsMobileOpen((prev) => !prev), [setIsMobileOpen]);
+  const toggleMobileSidebar = useCallback(() => setIsMobileOpen(!isMobileOpen), [isMobileOpen, setIsMobileOpen]);
   const closeMobileSidebar = useCallback(() => setIsMobileOpen(false), [setIsMobileOpen]);
 
   useEffect(() => {
