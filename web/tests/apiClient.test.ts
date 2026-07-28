@@ -6,7 +6,13 @@ import { useGlobalStore } from '../src/store/globalStore';
 
 describe('apiClient', () => {
   beforeEach(() => {
-    useGlobalStore.setState({ token: null, isAuthenticated: false, profile: null });
+    useGlobalStore.setState({
+      token: null,
+      isAuthenticated: false,
+      profile: null,
+      sessionExpired: false,
+      isHydrated: true,
+    });
     window.location.href = 'http://localhost/';
   });
 
@@ -25,7 +31,7 @@ describe('apiClient', () => {
     expect(receivedAuth).toBe('Bearer test-token');
   });
 
-  it('handles 401 by clearing auth state and redirecting', async () => {
+  it('handles 401 by clearing auth state and flagging session expiry', async () => {
     useGlobalStore.setState({ token: 'test-token', isAuthenticated: true, profile: null });
     
     server.use(
@@ -37,7 +43,8 @@ describe('apiClient', () => {
     await expect(apiClient.get('http://localhost/test-401')).rejects.toThrow();
     
     expect(useGlobalStore.getState().token).toBeNull();
-    expect(window.location.href).toBe('/login?sessionExpired=true');
+    expect(useGlobalStore.getState().isAuthenticated).toBe(false);
+    expect(useGlobalStore.getState().sessionExpired).toBe(true);
   });
 
   it('retries GET requests up to 3 times on 5xx errors with backoff', async () => {

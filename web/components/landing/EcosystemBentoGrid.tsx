@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { motion } from "framer-motion"
-import { Network, Webhook, FileCode2, Archive, Star, GitFork, ExternalLink } from "lucide-react"
+import { Network, Webhook, FileCode2, Archive, ExternalLink } from "lucide-react"
 
 const repos = [
 	{
@@ -50,6 +50,7 @@ const repos = [
 ]
 
 export function EcosystemBentoGrid({ initialStats = {} }: { initialStats?: Record<string, { stars: number; forks: number }> }) {
+  void initialStats;
 	const containerRef = useRef<HTMLDivElement>(null)
 	const [position, setPosition] = useState({ x: 0, y: 0 })
 	const [opacity, setOpacity] = useState(0)

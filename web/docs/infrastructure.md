@@ -17,7 +17,7 @@ The `apiClient` is a pre-configured Axios instance responsible for all client-to
 
 - **Timeout Configuration:** Requests timeout automatically after 15 seconds to prevent hanging UI states.
 - **Request Flow & Authentication Injection:** An interceptor automatically reads the current authentication token from the Zustand global store (`useGlobalStore.getState().token`) and injects it as a `Bearer` token into the `Authorization` header of every outbound request.
-- **Response Flow & 401 Handling:** A response interceptor watches for `401 Unauthorized` responses. If a 401 is detected, it triggers an automatic global logout (clearing the token and user profile) and redirects the user to `/login?sessionExpired=true`. An `isRedirecting` lock ensures this only happens once, even if multiple concurrent requests fail with a 401.
+- **Response Flow & 401 Handling:** A response interceptor watches for `401 Unauthorized` responses. If a 401 is detected, it marks the session as expired in the global store, clears the token and user profile, and lets the app-level session observer toast the user and redirect them to `/login` with a preserved return URL.
 - **Retry Strategy:** Idempotent requests (`GET`) that fail due to network errors or `5xx` server errors are automatically retried up to 3 times. An exponential backoff strategy is applied between retries (500ms, 1000ms, 2000ms). `POST`, `PUT`, `PATCH`, and `DELETE` requests are never retried automatically to avoid unintended side effects.
 
 ## 3. Global State
@@ -31,15 +31,15 @@ Global application state is managed using **Zustand**. The store is divided into
   - **User Slice:** Manages the authenticated user's `profile`.
 - **Persistence & Hydration:** The store leverages Zustand's `persist` middleware to save state to the browser's `localStorage` (`auth-storage`).
 - **State Segregation:** The `partialize` configuration dictates exactly what state is persisted. Currently, only `token`, `isAuthenticated`, and `profile` are saved. Transient state (such as UI toggles or temporary loading indicators) should never be added to the `partialize` return object.
-- **Logout Flow:** Invoking the `logout` action synchronously wipes the token, authentication status, and user profile from memory, which immediately cascades to the persisted `localStorage` to ensure no stale authentication data remains.
+- **Logout Flow:** Invoking the `logout` action synchronously wipes the token, authentication status, session-expired flag, and user profile from memory, which immediately cascades to the persisted `localStorage` to ensure no stale authentication data remains.
 
 ## 4. Authentication Flow
 
 The authentication lifecycle is managed through a combination of the global store and the API client:
 - **Login Flow:** After a successful credential exchange, `login(token)` is called, storing the token and setting `isAuthenticated: true`. This immediately hydrates `localStorage`.
 - **Token Persistence:** The token remains in `localStorage` across page reloads, ensuring the user remains logged in.
-- **Automatic Logout:** If a token expires or is invalidated by the server, any subsequent API request will return a `401 Unauthorized`. The `apiClient` detects this, calls the global `logout()` function, and executes a redirect.
-- **Redirect Behavior:** Upon automatic logout, the user is redirected to `/login?sessionExpired=true`.
+- **Automatic Logout:** If a token expires or is invalidated by the server, any subsequent API request will return a `401 Unauthorized`. The `apiClient` detects this, marks the session as expired, and the app shell handles the redirect and toast notification centrally.
+- **Redirect Behavior:** Upon automatic logout, the user is redirected to `/login` and shown a toast explaining that the session expired.
 
 ## 5. `useApi` Hook
 
@@ -51,7 +51,7 @@ The `useApi` hook is the standard React abstraction for triggering API calls fro
 - **Returned Values:** Returns `isLoading` (boolean), `data` (the typed payload), `error` (the error object), and the `request` function to trigger the call.
 - **Loading Lifecycle:** `isLoading` is set to `true` when the request begins and `false` when it settles (either success or failure). 
 - **Success Lifecycle:** On success, `data` is populated and `error` is cleared.
-- **Error Lifecycle:** On failure, the error is caught. If it is a known Axios network error, a global toast notification (`sonner`) is displayed to the user automatically (unless `showToastOnError` is explicitly set to `false`). The `error` state is then populated.
+- **Error Lifecycle:** On failure, the error is caught. If it is a known Axios network error, a global toast notification (`sonner`) is displayed to the user automatically (unless `showToastOnError` is explicitly set to `false`). `401` responses are excluded from this generic toast path so the session-expiry UX can handle them once, centrally. The `error` state is then populated.
 - **Best Practices:**
   - The hook internally utilizes an `isMounted` ref. If a component unmounts while a request is in-flight, it safely prevents state updates to avoid React memory leak warnings.
   - Unexpected runtime errors bypass the local `error` state and are intentionally thrown during the render cycle so they can be caught by Error Boundaries.

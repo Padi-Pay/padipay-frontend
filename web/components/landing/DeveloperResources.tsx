@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 import {
   GitMerge,
   Map,
-  Banknote,
   FileText,
-  TerminalSquare,
   BadgeCheck
 } from "lucide-react";
 import Link from "next/link";
