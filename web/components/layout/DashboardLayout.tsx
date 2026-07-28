@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState, cloneElement, isValidElement } from 'react';
+import { ReactNode, useState, useEffect, useCallback, cloneElement, isValidElement } from 'react';
 
 export interface DashboardLayoutProps {
   children: ReactNode;
@@ -20,13 +20,13 @@ export function DashboardLayout({
   const [uncontrolledIsMobileOpen, setUncontrolledIsMobileOpen] = useState(false);
 
   const isMobileOpen = controlledIsMobileOpen ?? uncontrolledIsMobileOpen;
-  const setIsMobileOpen = (open: boolean) => {
+  const setIsMobileOpen = useCallback((open: boolean) => {
     setUncontrolledIsMobileOpen(open);
     onMobileOpenChange?.(open);
-  };
+  }, [onMobileOpenChange]);
 
-  const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen);
-  const closeMobileSidebar = () => setIsMobileOpen(false);
+  const toggleMobileSidebar = useCallback(() => setIsMobileOpen((prev) => !prev), [setIsMobileOpen]);
+  const closeMobileSidebar = useCallback(() => setIsMobileOpen(false), [setIsMobileOpen]);
 
   useEffect(() => {
     if (!isMobileOpen) return;
@@ -37,7 +37,7 @@ export function DashboardLayout({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMobileOpen]);
+  }, [isMobileOpen, closeMobileSidebar]);
 
   const headerElement = isValidElement(header)
     ? cloneElement(header as React.ReactElement<{ onToggleMobileSidebar?: () => void; isMobileOpen?: boolean }>, {

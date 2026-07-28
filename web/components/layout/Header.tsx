@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, User as UserIcon } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { useGlobalStore } from '@/src/store/globalStore';
 
 export interface HeaderProps {
@@ -52,6 +52,7 @@ export function Header({ onToggleMobileSidebar }: HeaderProps) {
           title="View profile"
         >
           {profile?.avatarUrl ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={profile.avatarUrl}
               alt={displayName}
