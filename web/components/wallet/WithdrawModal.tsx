@@ -12,7 +12,7 @@ import { toast } from "sonner"
 import { ArrowUpRight, Loader2 } from "lucide-react"
 
 // Dynamic schema builder to validate amount against available balance
-const getWithdrawSchema = (availableBalance: number) =>
+export const getWithdrawSchema = (availableBalance: number) =>
   z.object({
     destinationAddress: z
       .string()
@@ -21,7 +21,7 @@ const getWithdrawSchema = (availableBalance: number) =>
       .startsWith("G", "Address must start with 'G'")
       .regex(/^G[a-zA-Z0-9]{55}$/, "Address must be a valid Stellar public address"),
     amount: z
-      .number({ invalid_type_error: "Amount is required and must be a valid number" })
+      .number({ message: "Amount is required and must be a valid number" })
       .positive("Amount must be greater than zero")
       .max(availableBalance, `Insufficient balance. Available is $${availableBalance}`),
   })

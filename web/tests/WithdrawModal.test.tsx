@@ -2,7 +2,7 @@ import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { WithdrawModal } from "../components/wallet/WithdrawModal"
+import { WithdrawModal, getWithdrawSchema } from "../components/wallet/WithdrawModal"
 import { useApi } from "../src/hooks/useApi"
 
 // Mock useApi
@@ -55,7 +55,20 @@ describe("WithdrawModal Component Unit Tests", () => {
 
   it("shows error for negative amount or invalid address on submit", async () => {
     const user = userEvent.setup()
-    const { container } = render(
+    
+    // 1. Verify Zod Schema validates negative amount directly in isolation
+    const schema = getWithdrawSchema(100)
+    const schemaResult = schema.safeParse({
+      destinationAddress: "G" + "A".repeat(55),
+      amount: -5.50,
+    })
+    expect(schemaResult.success).toBe(false)
+    if (!schemaResult.success) {
+      expect(schemaResult.error.issues[0].message).toBe("Amount must be greater than zero")
+    }
+
+    // 2. Verify UI form feedback outputs matching validation warnings
+    render(
       <WithdrawModal
         isOpen={true}
         onClose={mockOnClose}
@@ -67,18 +80,13 @@ describe("WithdrawModal Component Unit Tests", () => {
     const addressInput = screen.getByLabelText(/Destination Stellar Address/i)
     const submitBtn = screen.getByRole("button", { name: "Withdraw USDC" })
 
-    // Inputs: malformed address and amount
+    // Inputs: malformed address and amount is left empty
     await user.type(addressInput, "G1234")
-    
-    // Set hidden amount directly to bypass UI keyboard filter
-    const hiddenAmountInput = container.querySelector("input[name='amount']") as HTMLInputElement
-    fireEvent.change(hiddenAmountInput, { target: { value: "-5.5" } })
-
     await user.click(submitBtn)
 
     await waitFor(() => {
       expect(screen.getByText("Address must be exactly 56 characters")).toBeInTheDocument()
-      expect(screen.getByText("Amount must be greater than zero")).toBeInTheDocument()
+      expect(screen.getByText("Amount is required")).toBeInTheDocument()
     })
 
     expect(mockRequest).not.toHaveBeenCalled()
