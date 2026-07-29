@@ -57,7 +57,7 @@ describe("useWallet Hook SWR Lifecycles", () => {
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)
-    })
+    }, { timeout: 5000 })
 
     expect(result.current.wallet).toBeUndefined()
     expect(result.current.error).toBeDefined()

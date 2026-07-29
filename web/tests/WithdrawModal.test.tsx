@@ -55,7 +55,7 @@ describe("WithdrawModal Component Unit Tests", () => {
 
   it("shows error for negative amount or invalid address on submit", async () => {
     const user = userEvent.setup()
-    render(
+    const { container } = render(
       <WithdrawModal
         isOpen={true}
         onClose={mockOnClose}
@@ -65,12 +65,15 @@ describe("WithdrawModal Component Unit Tests", () => {
     )
 
     const addressInput = screen.getByLabelText(/Destination Stellar Address/i)
-    const amountInput = screen.getByLabelText(/Amount \(USDC\)/i)
     const submitBtn = screen.getByRole("button", { name: "Withdraw USDC" })
 
     // Inputs: malformed address and amount
     await user.type(addressInput, "G1234")
-    await user.type(amountInput, "-5.50")
+    
+    // Set hidden amount directly to bypass UI keyboard filter
+    const hiddenAmountInput = container.querySelector("input[name='amount']") as HTMLInputElement
+    fireEvent.change(hiddenAmountInput, { target: { value: "-5.5" } })
+
     await user.click(submitBtn)
 
     await waitFor(() => {
