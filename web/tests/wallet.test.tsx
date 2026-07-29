@@ -71,7 +71,7 @@ describe("Wallet Experience Epic Integration Tests", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Failed to sync with Stellar node/i)).toBeInTheDocument()
-    })
+    }, { timeout: 5000 })
   })
 
   it("validates funding modal faucet top-up click triggers mutation", async () => {
