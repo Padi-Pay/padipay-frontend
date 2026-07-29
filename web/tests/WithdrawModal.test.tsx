@@ -86,7 +86,7 @@ describe("WithdrawModal Component Unit Tests", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Address must be exactly 56 characters")).toBeInTheDocument()
-      expect(screen.getByText("Amount is required")).toBeInTheDocument()
+      expect(screen.getByText("Amount is required and must be a valid number")).toBeInTheDocument()
     })
 
     expect(mockRequest).not.toHaveBeenCalled()
