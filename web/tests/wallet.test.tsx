@@ -106,7 +106,7 @@ describe("Wallet Experience Epic Integration Tests", () => {
     await user.click(screen.getByRole("button", { name: /Fund Wallet/i }))
 
     // Faucet instruction check
-    expect(screen.getByText(/Request Testnet USDC/i)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Request Testnet USDC" })).toBeInTheDocument()
 
     // Request coins
     await user.click(screen.getByRole("button", { name: "Request Testnet USDC" }))
