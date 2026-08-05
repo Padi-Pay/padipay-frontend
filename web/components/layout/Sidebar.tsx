@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Wallet, ArrowLeftRight, User, X, LogOut } from 'lucide-react';
 import { useGlobalStore, AUTH_STORAGE_KEY } from '@/src/store/globalStore';
@@ -55,8 +56,14 @@ export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
       {/* Header / Logo */}
       <div className="flex items-center justify-between h-16 px-6 border-b border-outline-variant/60">
         <Link href="/dashboard" className="flex items-center gap-2.5 font-bold text-xl text-foreground">
-          <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-white text-sm font-black shadow-md shadow-primary/20">
-            P
+          <div className="flex h-8 w-8 items-center justify-center">
+            <Image 
+              src="/apple-touch-icon.png" 
+              alt="PadiPay Logo" 
+              width={32} 
+              height={32} 
+              className="rounded-xl shadow-sm" 
+            />
           </div>
           <span>PadiPay</span>
         </Link>
