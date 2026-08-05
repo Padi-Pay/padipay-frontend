@@ -74,8 +74,13 @@ export function Navbar() {
 								className="hidden sm:block text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
 								GitHub
 							</Link>
+							<Link
+								href="/login"
+								className="hidden md:block text-sm font-medium text-foreground/70 hover:text-foreground transition-colors">
+								Login
+							</Link>
 							<Link 
-								href="/coming-soon"
+								href="/register"
 								className="hidden md:flex justify-center items-center bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
 								Get Started
 							</Link>
@@ -161,7 +166,13 @@ export function Navbar() {
 							GitHub
 						</Link>
 						<Link
-							href="/coming-soon"
+							href="/login"
+							onClick={closeMenu}
+							className="w-full flex justify-center items-center bg-surface-container/50 text-foreground border border-outline-variant/60 px-4 py-3 rounded-lg text-base font-bold hover:bg-surface-variant transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary">
+							Login
+						</Link>
+						<Link
+							href="/register"
 							onClick={closeMenu}
 							className="w-full flex justify-center items-center bg-primary text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
 							Get Started
