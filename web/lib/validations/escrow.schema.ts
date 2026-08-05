@@ -1,9 +1,8 @@
 import { z } from "zod";
 
 export const escrowIntentSchema = z.object({
-  sellerReference: z.string().min(1, "Seller reference is required"),
-  amount: z.number().positive("Amount must be greater than zero"),
-  description: z.string().min(1, "Description is required"),
+  seller: z.string().min(56, "Stellar public key must be 56 characters").max(56),
+  amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Amount must be a positive number"),
 });
 
 export type EscrowIntentFormData = z.infer<typeof escrowIntentSchema>;
