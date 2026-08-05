@@ -60,22 +60,27 @@ export function DashboardLayout({
       </aside>
 
       {/* Mobile Sidebar Drawer & Overlay */}
-      {isMobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
-          {/* Dark backdrop overlay */}
-          <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-            onClick={closeMobileSidebar}
-            aria-hidden="true"
-            data-testid="mobile-backdrop"
-          />
+      <div 
+        className={`fixed inset-0 z-50 lg:hidden flex transition-opacity duration-300 ease-in-out ${isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
+        role="dialog" 
+        aria-modal="true" 
+        aria-label="Mobile Navigation"
+      >
+        {/* Dark backdrop overlay */}
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          onClick={closeMobileSidebar}
+          aria-hidden="true"
+          data-testid="mobile-backdrop"
+        />
 
-          {/* Drawer container */}
-          <aside className="relative z-50 flex flex-col w-[280px] max-w-[80vw] h-full bg-surface border-r border-outline-variant shadow-2xl overflow-y-auto">
-            {mobileSidebarElement}
-          </aside>
-        </div>
-      )}
+        {/* Drawer container */}
+        <aside 
+          className={`relative z-50 flex flex-col w-[280px] max-w-[80vw] h-full bg-surface border-r border-outline-variant shadow-2xl overflow-y-auto transition-transform duration-300 ease-in-out ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        >
+          {mobileSidebarElement}
+        </aside>
+      </div>
 
       {/* Main layout container */}
       <div className="flex flex-1 flex-col h-full min-w-0 overflow-hidden">
