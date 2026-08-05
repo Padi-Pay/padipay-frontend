@@ -55,7 +55,7 @@ function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await apiClient.post('/api/auth/login', data);
-      const { token, user } = response.data;
+      const { token, user } = response.data.data;
       
       if (token && user) {
         useGlobalStore.getState().login(token);

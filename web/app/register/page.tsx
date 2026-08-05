@@ -52,8 +52,16 @@ function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await apiClient.post('/api/auth/register', data);
-      const { token, user } = response.data;
+      // 1. Register the user
+      await apiClient.post('/api/auth/register', data);
+      
+      // 2. Automatically log them in since the backend register doesn't return a token
+      const loginResponse = await apiClient.post('/api/auth/login', {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { token, user } = loginResponse.data.data;
       
       if (token && user) {
         useGlobalStore.getState().login(token);
