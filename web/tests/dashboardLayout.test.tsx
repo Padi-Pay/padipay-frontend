@@ -70,7 +70,7 @@ describe('Authenticated Application Shell', () => {
 
     // Click backdrop overlay to close
     fireEvent.click(screen.getByTestId('mobile-backdrop'));
-    expect(screen.queryByRole('dialog', { name: /mobile navigation/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: /mobile navigation/i })).toHaveClass('opacity-0');
   });
 
   it('fetches profile details on mount and handles optimistic UI update with rollback on failure', async () => {

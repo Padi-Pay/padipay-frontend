@@ -1,8 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRightLeft, Wallet, ListChecks, ShieldCheck, ArrowRight, Zap, History, Activity } from 'lucide-react';
 import { useGlobalStore } from '@/src/store/globalStore';
+import { useApi } from '@/src/hooks/useApi';
 
 const quickActions = [
   {
@@ -37,9 +39,30 @@ const quickActions = [
   },
 ];
 
+interface Escrow {
+  id: string;
+  amount: string;
+  asset: string | null;
+  status: string;
+  createdAt: string;
+}
+
+interface EscrowsResponse {
+  success: boolean;
+  message: string;
+  data: Escrow[];
+}
+
 export default function DashboardHomePage() {
   const profile = useGlobalStore((state) => state.profile);
-  const firstName = profile?.name ? profile.name.split(' ')[0] : 'there';
+  const firstName = profile?.name ? profile.name.split(' ')[0] : null;
+  const { request: requestEscrows, isLoading, data } = useApi<EscrowsResponse>();
+
+  useEffect(() => {
+    requestEscrows({ method: 'GET', url: '/api/accounts/me/escrows' });
+  }, [requestEscrows]);
+
+  const recentEscrows = data?.data?.slice(0, 4) || [];
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -52,7 +75,7 @@ export default function DashboardHomePage() {
         <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="max-w-xl">
             <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
-              Welcome back, {firstName}! 👋
+              Welcome back{firstName ? `, ${firstName}` : ''}
             </h1>
             <p className="mt-4 text-base font-medium text-white/80 sm:text-lg">
               You are securely connected to the PadiPay decentralized relayer. Your wallet is active and ready for secure escrows.
@@ -99,21 +122,74 @@ export default function DashboardHomePage() {
 
       {/* Activity & System Status */}
       <section className="grid gap-6 lg:grid-cols-[1fr_300px]">
-        {/* Recent Activity Skeleton */}
+        {/* Recent Activity */}
         <div className="rounded-[2rem] border border-outline-variant/50 bg-white/60 p-6 shadow-sm backdrop-blur-lg sm:p-8 animate-in fade-in slide-in-from-bottom-8 delay-500 fill-mode-both">
-          <div className="flex items-center gap-3 border-b border-outline-variant/50 pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container text-foreground/70">
-              <History className="h-5 w-5" />
+          <div className="flex items-center justify-between border-b border-outline-variant/50 pb-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container text-foreground/70">
+                <History className="h-5 w-5" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
             </div>
-            <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
+            <Link href="/dashboard/escrows" className="text-sm font-semibold text-primary hover:underline">
+              View all
+            </Link>
           </div>
           
-          <div className="mt-8 flex flex-col items-center justify-center py-12 text-center opacity-60">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
-              <Zap className="h-6 w-6 text-foreground/40" />
-            </div>
-            <h3 className="mt-4 text-sm font-semibold text-foreground">No recent activity</h3>
-            <p className="mt-1 text-xs text-foreground/60 max-w-[200px]">Create an escrow intent or fund your wallet to get started.</p>
+          <div className="mt-6 flex flex-col gap-4">
+            {isLoading && !data ? (
+              <div className="flex flex-col gap-4 opacity-60">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center justify-between animate-pulse">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-surface-container"></div>
+                      <div className="space-y-2">
+                        <div className="h-4 w-24 rounded bg-surface-container"></div>
+                        <div className="h-3 w-16 rounded bg-surface-container"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : recentEscrows.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center opacity-60">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
+                  <Zap className="h-6 w-6 text-foreground/40" />
+                </div>
+                <h3 className="mt-4 text-sm font-semibold text-foreground">No recent activity</h3>
+                <p className="mt-1 text-xs text-foreground/60 max-w-[200px]">Create an escrow intent or fund your wallet to get started.</p>
+              </div>
+            ) : (
+              recentEscrows.map((escrow) => (
+                <Link
+                  key={escrow.id}
+                  href={`/dashboard/escrows/${escrow.id}`}
+                  className="group flex items-center justify-between rounded-xl p-3 transition-colors hover:bg-surface-container/50"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-50 text-purple-600 transition-transform group-hover:scale-110">
+                      <ListChecks className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                        Created Escrow
+                      </p>
+                      <p className="text-xs text-foreground/60 font-mono mt-0.5">
+                        {escrow.id.split('-')[0]}...
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-foreground">
+                      {escrow.amount} {escrow.asset || 'XLM'}
+                    </p>
+                    <p className={`text-xs font-semibold mt-1 ${escrow.status === 'PENDING' ? 'text-orange-500' : escrow.status === 'SUCCESS' ? 'text-green-500' : 'text-primary'}`}>
+                      {escrow.status}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            )}
           </div>
         </div>
 
