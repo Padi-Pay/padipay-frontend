@@ -45,7 +45,7 @@ describe('Wallet Page', () => {
     render(<WalletPage />);
 
     await waitFor(() => {
-      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('100.00 XLM').length).toBeGreaterThan(0);
       expect(screen.getByText('GABCDEFGHIJKLMNOPQRSTUVWXYZ')).toBeInTheDocument();
     });
   });
@@ -64,7 +64,7 @@ describe('Wallet Page', () => {
 
     // Wait for initial load
     await waitFor(() => {
-      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('100.00 XLM').length).toBeGreaterThan(0);
     });
 
     const fundBtn = screen.getByRole('button', { name: /Fund Testnet/i });
@@ -92,7 +92,7 @@ describe('Wallet Page', () => {
     render(<WalletPage />);
 
     await waitFor(() => {
-      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('100.00 XLM').length).toBeGreaterThan(0);
     });
 
     // Open Modal

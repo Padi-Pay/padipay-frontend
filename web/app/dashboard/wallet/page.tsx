@@ -76,7 +76,8 @@ export default function WalletPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const balance = balanceData?.data?.balance || '0.00';
+  const rawBalance = balanceData?.data?.balance || '0.00';
+  const balance = Number(rawBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const asset = balanceData?.data?.asset || 'XLM';
   const publicKey = walletData?.data?.publicKey;
   const recentEscrows = escrowsData?.data?.slice(0, 5) || [];
