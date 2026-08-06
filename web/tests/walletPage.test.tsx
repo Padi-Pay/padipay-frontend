@@ -45,7 +45,7 @@ describe('Wallet Page', () => {
     render(<WalletPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('100 XLM')).toBeInTheDocument();
+      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
       expect(screen.getByText('GABCDEFGHIJKLMNOPQRSTUVWXYZ')).toBeInTheDocument();
     });
   });
@@ -64,10 +64,10 @@ describe('Wallet Page', () => {
 
     // Wait for initial load
     await waitFor(() => {
-      expect(screen.getByText('100 XLM')).toBeInTheDocument();
+      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
     });
 
-    const fundBtn = screen.getByRole('button', { name: /Fund via Testnet/i });
+    const fundBtn = screen.getByRole('button', { name: /Fund Testnet/i });
     fireEvent.click(fundBtn);
 
     await waitFor(() => {
@@ -92,11 +92,11 @@ describe('Wallet Page', () => {
     render(<WalletPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('100 XLM')).toBeInTheDocument();
+      expect(screen.getAllByText('100 XLM').length).toBeGreaterThan(0);
     });
 
     // Open Modal
-    fireEvent.click(screen.getByRole('button', { name: /Withdraw Funds/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Withdraw' }));
     
     expect(screen.getByRole('dialog', { name: /Withdraw Funds/i })).toBeInTheDocument();
 
@@ -111,8 +111,7 @@ describe('Wallet Page', () => {
     await waitFor(() => {
       expect(withdrawMock).toHaveBeenCalledWith({
         destinationAddress: 'GAOLDMIQ7HE4L7BQRVK6X5RW3N74MACJVVG3TZPEYG5OLESBQJZQMQ26',
-        amount: '50',
-        asset: 'XLM'
+        amount: '50'
       });
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });

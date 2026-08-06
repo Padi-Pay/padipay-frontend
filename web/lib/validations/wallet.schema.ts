@@ -10,7 +10,6 @@ export const withdrawalSchema = z.object({
     .string()
     .length(56, "Address must be exactly 56 characters")
     .startsWith("G", "Address must start with 'G'"),
-  asset: z.string().optional().default('XLM'),
 });
 
 export type WithdrawalFormData = z.infer<typeof withdrawalSchema>;
