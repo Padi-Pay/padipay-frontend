@@ -124,15 +124,17 @@ export default function WalletPage() {
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Wallet Hero Section */}
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 p-8 text-white shadow-2xl shadow-blue-900/20 sm:p-10">
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/90 via-primary to-emerald-600 p-8 text-white shadow-2xl shadow-primary/20 sm:p-10">
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-black/20 blur-3xl"></div>
+        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-black/10 blur-3xl"></div>
         
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <div className="flex items-center gap-3 opacity-80 mb-4">
-              <Wallet className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-widest">Managed Wallet</span>
+            <div className="flex items-center gap-3 opacity-90 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md shadow-inner ring-1 ring-white/30">
+                <Wallet className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-sm font-bold uppercase tracking-widest text-white">Managed Wallet</span>
             </div>
             <h1 className="text-4xl font-black tracking-tight sm:text-5xl">
               {isLoadingBalance && !balanceData ? (
@@ -141,16 +143,16 @@ export default function WalletPage() {
                 `${balance} ${asset}`
               )}
             </h1>
-            <p className="mt-4 text-sm font-medium text-white/70 max-w-md">
+            <p className="mt-4 text-sm font-medium text-white/80 max-w-md sm:text-base">
               Your primary Stellar account provisioned by the Relayer. Use this address for all incoming payments and escrows.
             </p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 mt-6 md:mt-0">
             <Button 
               onClick={handleFund} 
               variant="secondary"
-              className="bg-white/10 hover:bg-white/20 text-white border-none backdrop-blur-md"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-md font-semibold"
               disabled={!publicKey || isFunding}
               isLoading={isFunding}
             >
@@ -159,8 +161,8 @@ export default function WalletPage() {
             </Button>
             <Button 
               onClick={() => setIsWithdrawModalOpen(true)}
-              variant="primary" 
-              className="bg-white text-blue-900 hover:bg-white/90"
+              variant="secondary" 
+              className="bg-white text-primary hover:bg-white/90 font-bold border-none"
               disabled={!balanceData || Number(balanceData.data.balance) <= 0}
             >
               <ArrowUpRight className="mr-2 h-4 w-4" />
@@ -235,7 +237,7 @@ export default function WalletPage() {
       <section className="rounded-[2rem] border border-outline-variant/50 bg-white/60 p-6 shadow-[0_18px_50px_rgba(17,28,45,0.04)] backdrop-blur-lg sm:p-8">
         <div className="flex items-center justify-between border-b border-outline-variant/50 pb-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container text-foreground/70">
               <History className="h-5 w-5" />
             </div>
             <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
@@ -273,26 +275,26 @@ export default function WalletPage() {
               <Link
                 key={escrow.id}
                 href={`/dashboard/escrows/${escrow.id}`}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl p-4 transition-all hover:bg-white hover:shadow-sm ring-1 ring-transparent hover:ring-black/5 gap-4"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-xl p-3 transition-colors hover:bg-surface-container/50 gap-4"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition-transform group-hover:scale-110">
-                    <ListChecks className="h-5 w-5" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 transition-transform group-hover:scale-110">
+                    <ListChecks className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
+                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                       Escrow Intent
                     </p>
-                    <p className="text-xs text-foreground/60 font-mono mt-1">
+                    <p className="text-xs text-foreground/60 font-mono mt-0.5">
                       {escrow.id.split('-')[0]}...
                     </p>
                   </div>
                 </div>
                 <div className="flex sm:flex-col items-center sm:items-end justify-between">
-                  <p className="text-base font-black text-foreground">
+                  <p className="text-sm font-bold text-foreground">
                     {escrow.amount} {escrow.asset || 'XLM'}
                   </p>
-                  <p className={`text-xs font-bold mt-1 px-2 py-0.5 rounded-full ${escrow.status === 'PENDING' ? 'bg-orange-50 text-orange-600' : escrow.status === 'LOCKED' ? 'bg-blue-50 text-blue-600' : escrow.status === 'SUCCESS' ? 'bg-green-50 text-green-600' : 'bg-surface-container text-foreground/70'}`}>
+                  <p className={`text-xs font-semibold mt-1 ${escrow.status === 'PENDING' ? 'text-orange-500' : escrow.status === 'SUCCESS' ? 'text-green-500' : 'text-primary'}`}>
                     {escrow.status}
                   </p>
                 </div>
