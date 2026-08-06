@@ -102,7 +102,17 @@ export default function WalletPage() {
     });
     if (response && !response.error) {
       toast.success('Successfully funded testnet wallet! Balances updating...');
-      setTimeout(fetchBalances, 3000);
+      // Poll for balance updates since ledger closure is async
+      let attempts = 0;
+      const poll = () => {
+        if (attempts > 5) return;
+        setTimeout(() => {
+          fetchBalances();
+          attempts++;
+          poll();
+        }, 3000);
+      };
+      poll();
     }
   };
 
@@ -116,7 +126,17 @@ export default function WalletPage() {
       toast.success('Withdrawal initiated successfully!');
       setIsWithdrawModalOpen(false);
       reset();
-      setTimeout(fetchBalances, 3000);
+      // Poll for balance updates since ledger closure is async
+      let attempts = 0;
+      const poll = () => {
+        if (attempts > 5) return;
+        setTimeout(() => {
+          fetchBalances();
+          attempts++;
+          poll();
+        }, 3000);
+      };
+      poll();
     }
   };
 
