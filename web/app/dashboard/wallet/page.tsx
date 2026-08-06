@@ -3,7 +3,14 @@
 import { useEffect, useState } from 'react';
 import { CircleDollarSign, Wallet, RefreshCw, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useApi } from '@/src/hooks/useApi';
+import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
+import { TextInput } from '@/components/forms/TextInput';
+import { CurrencyInput } from '@/components/forms/CurrencyInput';
+import { withdrawalSchema, WithdrawalFormData } from '@/lib/validations/wallet.schema';
 
 interface WalletBalanceResponse {
   success: boolean;
@@ -27,11 +34,30 @@ interface WalletInfoResponse {
 export default function WalletPage() {
   const { request: requestBalance, isLoading: isLoadingBalance, data: balanceData, error: balanceError } = useApi<WalletBalanceResponse>();
   const { request: requestWallet, isLoading: isLoadingWallet, data: walletData } = useApi<WalletInfoResponse>();
+  const { request: requestFund, isLoading: isFunding } = useApi();
+  const { request: requestWithdraw, isLoading: isWithdrawing } = useApi();
 
-  useEffect(() => {
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<WithdrawalFormData>({
+    resolver: zodResolver(withdrawalSchema),
+  });
+
+  const fetchBalances = () => {
     requestBalance({ method: 'GET', url: '/api/wallets/me/balance' });
     requestWallet({ method: 'GET', url: '/api/wallets/me' });
-  }, [requestBalance, requestWallet]);
+  };
+
+  useEffect(() => {
+    fetchBalances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const balance = balanceData?.data?.balance || '0.00';
   const asset = balanceData?.data?.asset || 'XLM';
@@ -44,6 +70,34 @@ export default function WalletPage() {
       setCopied(true);
       toast.success('Wallet address copied to clipboard');
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleFund = async () => {
+    if (!publicKey) return;
+    const response = await requestFund({
+      method: 'POST',
+      url: '/api/relayer/fund',
+      data: { walletAddress: publicKey, amount: '10000', asset: 'XLM' },
+      successMessage: 'Successfully funded testnet wallet! Balances updating...',
+    });
+    if (response) {
+      // Small delay for blockchain confirmation before refreshing
+      setTimeout(fetchBalances, 3000);
+    }
+  };
+
+  const onWithdrawSubmit = async (data: WithdrawalFormData) => {
+    const response = await requestWithdraw({
+      method: 'POST',
+      url: '/api/wallets/withdraw',
+      data,
+      successMessage: 'Withdrawal initiated successfully!',
+    });
+    if (response) {
+      setIsWithdrawModalOpen(false);
+      reset();
+      setTimeout(fetchBalances, 3000);
     }
   };
 
@@ -129,7 +183,69 @@ export default function WalletPage() {
             </div>
           </div>
         )}
+        
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Button 
+            onClick={() => setIsWithdrawModalOpen(true)}
+            variant="primary" 
+            disabled={!balanceData || Number(balanceData.data.balance) <= 0}
+            className="w-full sm:w-auto"
+          >
+            Withdraw Funds
+          </Button>
+          <Button 
+            onClick={handleFund} 
+            variant="outline" 
+            disabled={!publicKey || isFunding}
+            isLoading={isFunding}
+            className="w-full sm:w-auto"
+          >
+            Fund via Testnet
+          </Button>
+        </div>
       </div>
+
+      {/* Withdrawal Modal */}
+      <Modal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+        title="Withdraw Funds"
+        description="Transfer your XLM to an external Stellar wallet."
+      >
+        <form onSubmit={handleSubmit(onWithdrawSubmit)} className="space-y-6">
+          <TextInput
+            label="Destination Address"
+            placeholder="G..."
+            error={errors.destinationAddress?.message}
+            {...register('destinationAddress')}
+          />
+          <CurrencyInput
+            label="Amount (XLM)"
+            placeholder="0.00"
+            asset="XLM"
+            error={errors.amount?.message}
+            {...register('amount')}
+          />
+          
+          <div className="flex gap-3 justify-end pt-4 border-t border-outline-variant/50">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsWithdrawModalOpen(false)}
+              disabled={isWithdrawing}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isLoading={isWithdrawing}
+            >
+              Confirm Withdrawal
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </section>
   );
 }
