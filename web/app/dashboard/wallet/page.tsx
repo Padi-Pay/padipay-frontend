@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CircleDollarSign, Wallet, RefreshCw, Copy, Check, History, Zap, ListChecks, ArrowDownRight, ArrowUpRight } from 'lucide-react';
+import { Wallet, RefreshCw, Copy, Check, History, ArrowDownRight, ArrowUpRight, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { TextInput } from '@/components/forms/TextInput';
 import { CurrencyInput } from '@/components/forms/CurrencyInput';
+import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { withdrawalSchema, WithdrawalFormData } from '@/lib/validations/wallet.schema';
 
 interface WalletBalanceResponse {
@@ -47,7 +48,7 @@ interface EscrowsResponse {
 }
 
 export default function WalletPage() {
-  const { request: requestBalance, isLoading: isLoadingBalance, data: balanceData, error: balanceError } = useApi<WalletBalanceResponse>();
+  const { request: requestBalance, isLoading: isLoadingBalance, data: balanceData } = useApi<WalletBalanceResponse>();
   const { request: requestWallet, isLoading: isLoadingWallet, data: walletData } = useApi<WalletInfoResponse>();
   const { request: requestFund, isLoading: isFunding } = useApi();
   const { request: requestWithdraw, isLoading: isWithdrawing } = useApi();
@@ -58,7 +59,6 @@ export default function WalletPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm<WithdrawalFormData>({
@@ -142,188 +142,208 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-6xl mx-auto pb-10">
       
       {/* Wallet Hero Section */}
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/90 via-primary to-emerald-600 p-8 text-white shadow-2xl shadow-primary/20 sm:p-10">
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-black/10 blur-3xl"></div>
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary via-primary/95 to-emerald-700 p-8 sm:p-12 text-white shadow-xl">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -right-10 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+          <div className="absolute -bottom-24 -left-10 h-80 w-80 rounded-full bg-black/10 blur-3xl"></div>
+        </div>
         
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-3 opacity-90 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md shadow-inner ring-1 ring-white/30">
-                <Wallet className="h-5 w-5 text-white" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-inner ring-1 ring-white/20">
+                <Wallet className="h-6 w-6 text-white" />
               </div>
-              <span className="text-sm font-bold uppercase tracking-widest text-white">Managed Wallet</span>
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-white/80">Managed Wallet</h2>
+                <p className="text-xs text-white/60">Testnet Provisioned</p>
+              </div>
             </div>
-            <h1 className="text-4xl font-black tracking-tight sm:text-5xl">
-              {isLoadingBalance && !balanceData ? (
-                <span className="inline-block h-12 w-48 animate-pulse rounded-lg bg-white/20" />
-              ) : (
-                `${balance} ${asset}`
-              )}
-            </h1>
-            <p className="mt-4 text-sm font-medium text-white/80 max-w-md sm:text-base">
-              Your primary Stellar account provisioned by the Relayer. Use this address for all incoming payments and escrows.
-            </p>
+            
+            <div className="space-y-2">
+              <div className="text-sm font-medium text-white/80">Total Balance</div>
+              <h1 className="text-5xl md:text-6xl font-black tracking-tight flex items-baseline gap-3">
+                {isLoadingBalance && !balanceData ? (
+                  <SkeletonLoader variant="rectangular" className="h-14 w-64 bg-white/20" />
+                ) : (
+                  <>
+                    <span>{balance}</span>
+                    <span className="text-2xl md:text-3xl font-bold text-white/70">{asset}</span>
+                  </>
+                )}
+              </h1>
+            </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-3 mt-6 md:mt-0">
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <Button 
               onClick={handleFund} 
               variant="secondary"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-md font-semibold"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg shadow-black/10 w-full sm:w-auto h-12 px-6"
               disabled={!publicKey || isFunding}
               isLoading={isFunding}
             >
-              <ArrowDownRight className="mr-2 h-4 w-4" />
+              <ArrowDownRight className="mr-2 h-5 w-5" />
               Fund Testnet
             </Button>
             <Button 
               onClick={() => setIsWithdrawModalOpen(true)}
               variant="secondary" 
-              className="bg-white text-primary hover:bg-white/90 font-bold border-none"
+              className="bg-white text-primary hover:bg-white/90 shadow-lg shadow-black/10 font-bold border-none w-full sm:w-auto h-12 px-6"
               disabled={!balanceData || Number(balanceData.data.balance) <= 0}
             >
-              <ArrowUpRight className="mr-2 h-4 w-4" />
+              <ArrowUpRight className="mr-2 h-5 w-5" />
               Withdraw
             </Button>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-        {/* Wallet Address Card */}
-        <div className="rounded-[1.75rem] border border-outline-variant/60 bg-white/90 p-6 shadow-[0_18px_50px_rgba(17,28,45,0.07)] sm:p-8">
-          <div className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/45 mb-4">
-            Wallet Address
-          </div>
-          <div className="flex items-center justify-between gap-3 rounded-xl bg-surface-container/30 p-4 ring-1 ring-black/5">
-            {isLoadingWallet && !publicKey ? (
-              <span className="inline-block h-6 w-full animate-pulse rounded bg-foreground/10" />
-            ) : publicKey ? (
-              <>
-                <div className="truncate font-mono text-sm font-medium text-foreground sm:text-base">
-                  {publicKey}
-                </div>
-                <button
-                  onClick={handleCopy}
-                  className="flex-shrink-0 rounded-lg p-2.5 text-foreground/50 transition-colors hover:bg-black/5 hover:text-primary active:bg-black/10"
-                  aria-label="Copy wallet address"
-                >
-                  {copied ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5" />}
-                </button>
-              </>
-            ) : (
-              <span className="text-sm font-medium text-foreground/50">Address not found</span>
-            )}
-          </div>
-        </div>
-
-        {/* Snapshot Card */}
-        <div className="rounded-[1.75rem] border border-outline-variant/60 bg-white/90 p-6 shadow-[0_18px_50px_rgba(17,28,45,0.07)] sm:p-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/45">
-              Financial Snapshot
+      <div className="grid gap-8 lg:grid-cols-12">
+        {/* Left Column: Details & Snapshot */}
+        <div className="lg:col-span-5 flex flex-col gap-8">
+          {/* Wallet Address Card */}
+          <section className="rounded-[2rem] border border-outline-variant/60 bg-surface/80 backdrop-blur-xl p-6 sm:p-8 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold uppercase tracking-widest text-foreground/70">Wallet Address</h3>
             </div>
-            <button 
-              onClick={fetchBalances}
-              disabled={isLoadingBalance}
-              className="p-1 text-foreground/40 transition hover:text-primary disabled:opacity-50"
-            >
-              <RefreshCw className={`h-4 w-4 ${isLoadingBalance ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-xl bg-surface-container/30 p-4 ring-1 ring-black/5">
-              <div className="text-xs text-foreground/60 mb-1">Available</div>
-              <div className="text-lg font-bold text-foreground truncate">{balance} {asset}</div>
-            </div>
-            <div className="rounded-xl bg-surface-container/30 p-4 ring-1 ring-black/5">
-              <div className="text-xs text-foreground/60 mb-1">Locked in Escrow</div>
-              <div className="text-lg font-bold text-foreground truncate">
-                {isLoadingEscrows ? (
-                  <span className="inline-block h-6 w-16 animate-pulse rounded bg-foreground/10" />
-                ) : (
-                  `${pendingReleases} ${asset}`
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Recent Activity */}
-      <section className="rounded-[2rem] border border-outline-variant/50 bg-white/60 p-6 shadow-[0_18px_50px_rgba(17,28,45,0.04)] backdrop-blur-lg sm:p-8">
-        <div className="flex items-center justify-between border-b border-outline-variant/50 pb-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container text-foreground/70">
-              <History className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
-          </div>
-          <Link href="/dashboard/escrows" className="text-sm font-semibold text-primary hover:underline">
-            View all escrows
-          </Link>
-        </div>
-        
-        <div className="mt-6 flex flex-col gap-4">
-          {isLoadingEscrows && !escrowsData ? (
-            <div className="flex flex-col gap-4 opacity-60">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="flex items-center justify-between animate-pulse p-2">
-                  <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-full bg-surface-container"></div>
-                    <div className="space-y-2">
-                      <div className="h-4 w-24 rounded bg-surface-container"></div>
-                      <div className="h-3 w-16 rounded bg-surface-container"></div>
-                    </div>
+            
+            <div className="flex items-center justify-between gap-4 rounded-2xl bg-surface-container-lowest p-4 ring-1 ring-outline-variant/50 group transition-all hover:ring-primary/30">
+              {isLoadingWallet && !publicKey ? (
+                <SkeletonLoader variant="text" className="h-6 w-full" />
+              ) : publicKey ? (
+                <>
+                  <div className="break-all font-mono text-xs sm:text-sm font-medium text-foreground/80">
+                    {publicKey}
                   </div>
-                </div>
-              ))}
+                  <button
+                    onClick={handleCopy}
+                    className="flex-shrink-0 rounded-xl p-2.5 text-foreground/50 transition-all hover:bg-primary/10 hover:text-primary active:scale-95"
+                    aria-label="Copy wallet address"
+                  >
+                    {copied ? <Check className="h-5 w-5 text-emerald-500" /> : <Copy className="h-5 w-5" />}
+                  </button>
+                </>
+              ) : (
+                <span className="text-sm font-medium text-foreground/50">Address not found</span>
+              )}
             </div>
-          ) : recentEscrows.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-center opacity-70">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container/80 mb-4">
-                <Zap className="h-6 w-6 text-foreground/40" />
+          </section>
+
+          {/* Snapshot Card */}
+          <section className="rounded-[2rem] border border-outline-variant/60 bg-surface/80 backdrop-blur-xl p-6 sm:p-8 shadow-sm">
+             <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Activity className="h-5 w-5 text-primary" />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-foreground/70">Snapshot</h3>
               </div>
-              <h3 className="text-base font-semibold text-foreground">No recent activity</h3>
-              <p className="mt-2 text-sm text-foreground/60 max-w-[250px]">Your wallet activity and recent escrows will appear here.</p>
-            </div>
-          ) : (
-            recentEscrows.map((escrow) => (
-              <Link
-                key={escrow.id}
-                href={`/dashboard/escrows/${escrow.id}`}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-xl p-3 transition-colors hover:bg-surface-container/50 gap-4"
+              <button 
+                onClick={fetchBalances}
+                disabled={isLoadingBalance}
+                className="rounded-full p-2 text-foreground/40 transition-colors hover:bg-surface-container hover:text-primary disabled:opacity-50"
               >
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600 transition-transform group-hover:scale-110">
-                    <ListChecks className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                      Escrow Intent
-                    </p>
-                    <p className="text-xs text-foreground/60 font-mono mt-0.5">
-                      {escrow.id.split('-')[0]}...
-                    </p>
-                  </div>
-                </div>
-                <div className="flex sm:flex-col items-center sm:items-end justify-between">
-                  <p className="text-sm font-bold text-foreground">
-                    {escrow.amount} {escrow.asset || 'XLM'}
-                  </p>
-                  <p className={`text-xs font-semibold mt-1 ${escrow.status === 'PENDING' ? 'text-orange-500' : escrow.status === 'SUCCESS' ? 'text-green-500' : 'text-primary'}`}>
-                    {escrow.status}
-                  </p>
-                </div>
-              </Link>
-            ))
-          )}
+                <RefreshCw className={`h-4 w-4 ${isLoadingBalance ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+            <div className="grid gap-4">
+              <div className="flex items-center justify-between rounded-2xl bg-surface-container-lowest p-5 ring-1 ring-outline-variant/50">
+                <span className="text-sm font-medium text-foreground/60">Available to Spend</span>
+                <span className="text-lg font-bold text-foreground">
+                  {isLoadingBalance ? <SkeletonLoader variant="text" className="w-24 h-6" /> : `${balance} ${asset}`}
+                </span>
+              </div>
+              <div className="flex items-center justify-between rounded-2xl bg-surface-container-lowest p-5 ring-1 ring-outline-variant/50">
+                <span className="text-sm font-medium text-foreground/60">Locked in Escrow</span>
+                <span className="text-lg font-bold text-foreground">
+                  {isLoadingEscrows ? <SkeletonLoader variant="text" className="w-24 h-6" /> : `${pendingReleases.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${asset}`}
+                </span>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
+
+        {/* Right Column: Recent Activity */}
+        <div className="lg:col-span-7">
+          <section className="h-full rounded-[2rem] border border-outline-variant/60 bg-surface/80 backdrop-blur-xl p-6 sm:p-8 shadow-sm flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <History className="h-5 w-5 text-primary" />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-foreground/70">Recent Activity</h3>
+              </div>
+              <Link href="/dashboard/escrows" className="group flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+                View All <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+            
+            <div className="flex-1 flex flex-col gap-3">
+              {isLoadingEscrows && !escrowsData ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between rounded-2xl border border-outline-variant/30 p-4">
+                    <div className="flex items-center gap-4">
+                      <SkeletonLoader variant="circular" className="h-10 w-10" />
+                      <div className="space-y-2">
+                        <SkeletonLoader variant="text" className="h-4 w-24" />
+                        <SkeletonLoader variant="text" className="h-3 w-16" />
+                      </div>
+                    </div>
+                    <SkeletonLoader variant="text" className="h-6 w-20" />
+                  </div>
+                ))
+              ) : recentEscrows.length === 0 ? (
+                <div className="flex flex-1 flex-col items-center justify-center rounded-3xl border border-dashed border-outline-variant/60 bg-surface-container-lowest/50 py-12 text-center">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-container mb-4 text-foreground/40">
+                    <History className="h-8 w-8" />
+                  </div>
+                  <h4 className="text-lg font-bold text-foreground">No recent activity</h4>
+                  <p className="mt-2 text-sm text-foreground/60 max-w-[260px]">
+                    Your wallet transactions and escrow updates will appear here automatically.
+                  </p>
+                </div>
+              ) : (
+                recentEscrows.map((escrow) => (
+                  <Link
+                    key={escrow.id}
+                    href={`/dashboard/escrows/${escrow.id}`}
+                    className="group flex items-center justify-between rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 transition-all hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:scale-105 group-hover:bg-primary group-hover:text-white">
+                        <ArrowRight className="h-5 w-5 -rotate-45" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-foreground">
+                          Escrow Funding
+                        </p>
+                        <p className="text-xs font-medium text-foreground/50 mt-1">
+                          {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }).format(new Date(escrow.createdAt))}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-black text-foreground">
+                        {Number(escrow.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {escrow.asset || 'XLM'}
+                      </p>
+                      <div className="mt-1 flex justify-end">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                          escrow.status === 'PENDING' ? 'bg-orange-100 text-orange-700' : 
+                          escrow.status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-700' : 
+                          'bg-primary/10 text-primary'
+                        }`}>
+                          {escrow.status}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
+      </div>
 
       {/* Withdrawal Modal */}
       <Modal

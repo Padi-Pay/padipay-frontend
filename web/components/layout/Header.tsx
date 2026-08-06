@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu } from 'lucide-react';
 import { useGlobalStore } from '@/src/store/globalStore';
 
@@ -42,7 +43,18 @@ export function Header({ onToggleMobileSidebar }: HeaderProps) {
             <Menu className="w-5 h-5" />
           </button>
         )}
-        <h1 className="text-lg font-bold text-foreground">Dashboard</h1>
+        <Link href="/dashboard" className="flex items-center gap-2.5 font-bold text-lg text-foreground">
+          <div className="flex h-7 w-7 items-center justify-center">
+            <Image 
+              src="/apple-touch-icon.png" 
+              alt="PadiPay Logo" 
+              width={28} 
+              height={28} 
+              className="rounded-[10px] shadow-sm" 
+            />
+          </div>
+          <span>PadiPay</span>
+        </Link>
       </div>
 
       <div className="flex items-center gap-3">
