@@ -32,7 +32,7 @@ PadiPay leverages a modular architecture separating the conversational interface
 PadiPay is composed of several specialized, open-source repositories. We welcome contributions across the entire stack:
 
 - [**`padipay-relayer-api`**](https://github.com/Padi-Pay/padipay-relayer-api) — High-performance bridge handling gasless transaction relays, fee-bumping, and Soroban event monitoring.
-- [**`padipay-contracts`**](https://github.com/Padi-Pay/padipay-contract) — Formally verified Rust contracts responsible for multi-party escrow logic and secure fund holding.
+- [**`padipay-contracts`**](https://github.com/Padi-Pay/padipay-contracts) — Formally verified Rust contracts responsible for multi-party escrow logic and secure fund holding.
 - **`padipay-frontend`** *(This Repository)* — Holds both the landing page/developer discovery hub (`/web`) and the conversational interface (`/whatsappbot`) that abstracts blockchain complexity away from the end user.
 - [**`padipay-docs`**](https://github.com/Padi-Pay/padipay-docs) — The meta-repository containing governance documents, architecture diagrams, roadmaps, and ecosystem standards.
 
