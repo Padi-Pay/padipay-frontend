@@ -103,7 +103,7 @@ export default function WalletPage() {
       // Poll for balance updates since ledger closure is async
       let attempts = 0;
       const poll = () => {
-        if (attempts > 5) return;
+        if (attempts >= 2) return;
         setTimeout(() => {
           fetchBalances();
           attempts++;
@@ -127,7 +127,7 @@ export default function WalletPage() {
       // Poll for balance updates since ledger closure is async
       let attempts = 0;
       const poll = () => {
-        if (attempts > 5) return;
+        if (attempts >= 2) return;
         setTimeout(() => {
           fetchBalances();
           attempts++;
