@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UnauthenticatedRoute } from '@/components/auth/UnauthenticatedRoute';
 import { AuthLayout } from '@/components/auth/AuthLayout';
-import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
+// import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { TextInput } from '@/components/forms/TextInput';
 import { PasswordInput } from '@/components/forms/PasswordInput';
 import { useGlobalStore } from '@/src/store/globalStore';
@@ -93,11 +93,13 @@ function RegisterForm() {
         Create a workspace account and continue to your requested destination.
       </p>
 
+      {/* 
       <GoogleSignInButton redirectTarget={redirectTarget} />
       
       <div className="my-6 flex items-center text-sm text-foreground/40 before:mt-0.5 before:flex-1 before:border-t before:border-outline-variant after:mt-0.5 after:flex-1 after:border-t after:border-outline-variant">
         <span className="mx-4 text-xs uppercase tracking-wider font-medium">Or</span>
       </div>
+      */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <TextInput

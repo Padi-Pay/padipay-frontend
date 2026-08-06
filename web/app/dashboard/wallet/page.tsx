@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Wallet, RefreshCw, Copy, Check, History, ArrowDownRight, ArrowUpRight, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
+import { Wallet, RefreshCw, Copy, Check, History, ArrowDownRight, ArrowUpRight, ShieldCheck, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -80,8 +79,6 @@ export default function WalletPage() {
   const balance = Number(rawBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const asset = balanceData?.data?.asset || 'XLM';
   const publicKey = walletData?.data?.publicKey;
-  const recentEscrows = escrowsData?.data?.slice(0, 5) || [];
-
   const pendingReleases = escrowsData?.data?.filter(e => e.status === 'LOCKED').reduce((acc, curr) => acc + Number(curr.amount), 0) || 0;
 
   const [copied, setCopied] = useState(false);
@@ -274,72 +271,19 @@ export default function WalletPage() {
                 <History className="h-5 w-5 text-primary" />
                 <h3 className="text-sm font-bold uppercase tracking-widest text-foreground/70">Recent Activity</h3>
               </div>
-              <Link href="/dashboard/escrows" className="group flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary/80">
-                View All <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              {/* View All link removed as transaction history is unavailable */}
             </div>
             
             <div className="flex-1 flex flex-col gap-3">
-              {isLoadingEscrows && !escrowsData ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-2xl border border-outline-variant/30 p-4">
-                    <div className="flex items-center gap-4">
-                      <SkeletonLoader variant="circular" className="h-10 w-10" />
-                      <div className="space-y-2">
-                        <SkeletonLoader variant="text" className="h-4 w-24" />
-                        <SkeletonLoader variant="text" className="h-3 w-16" />
-                      </div>
-                    </div>
-                    <SkeletonLoader variant="text" className="h-6 w-20" />
-                  </div>
-                ))
-              ) : recentEscrows.length === 0 ? (
-                <div className="flex flex-1 flex-col items-center justify-center rounded-3xl border border-dashed border-outline-variant/60 bg-surface-container-lowest/50 py-12 text-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-container mb-4 text-foreground/40">
-                    <History className="h-8 w-8" />
-                  </div>
-                  <h4 className="text-lg font-bold text-foreground">No recent activity</h4>
-                  <p className="mt-2 text-sm text-foreground/60 max-w-[260px]">
-                    Your wallet transactions and escrow updates will appear here automatically.
-                  </p>
+              <div className="flex flex-1 flex-col items-center justify-center rounded-3xl border border-dashed border-outline-variant/60 bg-surface-container-lowest/50 py-12 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-container mb-4 text-foreground/40">
+                  <History className="h-8 w-8" />
                 </div>
-              ) : (
-                recentEscrows.map((escrow) => (
-                  <Link
-                    key={escrow.id}
-                    href={`/dashboard/escrows/${escrow.id}`}
-                    className="group flex items-center justify-between rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 transition-all hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:scale-105 group-hover:bg-primary group-hover:text-white">
-                        <ArrowRight className="h-5 w-5 -rotate-45" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-foreground">
-                          Escrow Funding
-                        </p>
-                        <p className="text-xs font-medium text-foreground/50 mt-1">
-                          {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }).format(new Date(escrow.createdAt))}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-black text-foreground">
-                        {Number(escrow.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {escrow.asset || 'XLM'}
-                      </p>
-                      <div className="mt-1 flex justify-end">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                          escrow.status === 'PENDING' ? 'bg-orange-100 text-orange-700' : 
-                          escrow.status === 'SUCCESS' ? 'bg-emerald-100 text-emerald-700' : 
-                          'bg-primary/10 text-primary'
-                        }`}>
-                          {escrow.status}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))
-              )}
+                <h4 className="text-lg font-bold text-foreground">Transaction history unavailable</h4>
+                <p className="mt-2 text-sm text-foreground/60 max-w-[280px]">
+                  A dedicated transaction ledger is currently not supported by the network relayer. 
+                </p>
+              </div>
             </div>
           </section>
         </div>
