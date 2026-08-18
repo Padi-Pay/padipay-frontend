@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import * as Sentry from '@sentry/nextjs';
 
 export interface UserProfile {
   id: string;
@@ -55,26 +56,37 @@ export const useGlobalStore = create<GlobalState>()(
       sessionExpired: false,
       login: (token: string) =>
         set({ token, isAuthenticated: true, sessionExpired: false }),
-      logout: () =>
+      logout: () => {
+        Sentry.setUser(null);
         set({
           token: null,
           isAuthenticated: false,
           profile: null,
           sessionExpired: false,
-        }),
-      markSessionExpired: () =>
+        });
+      },
+      markSessionExpired: () => {
+        Sentry.setUser(null);
         set({
           token: null,
           isAuthenticated: false,
           profile: null,
           sessionExpired: true,
-        }),
+        });
+      },
       clearSessionExpired: () => set({ sessionExpired: false }),
       setHydrated: (isHydrated: boolean) => set({ isHydrated }),
 
       // User Slice
       profile: null,
-      setProfile: (profile) => set({ profile }),
+      setProfile: (profile) => {
+        if (profile) {
+          Sentry.setUser({ id: profile.id });
+        } else {
+          Sentry.setUser(null);
+        }
+        set({ profile });
+      },
     }),
     {
       name: AUTH_STORAGE_KEY,
