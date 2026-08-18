@@ -6,7 +6,7 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   tracesSampleRate: 0.1,
   debug: false,
-  beforeSend: (event) => {
+  beforeSend: (event: any) => {
     return scrubEventData(event);
   },
 });

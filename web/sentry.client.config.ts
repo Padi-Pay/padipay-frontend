@@ -6,13 +6,13 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   tracesSampleRate: 0.1,
   debug: false,
-  integrations: (integrations) => {
-    return integrations.filter((integration) => {
+  integrations: (integrations: any[]) => {
+    return integrations.filter((integration: any) => {
       // Explicitly disable overly invasive integrations
       return integration.name !== 'CaptureConsole' && integration.name !== 'Replay';
     });
   },
-  beforeSend: (event) => {
+  beforeSend: (event: any) => {
     return scrubEventData(event);
   },
 });

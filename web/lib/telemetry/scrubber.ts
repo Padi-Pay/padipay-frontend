@@ -1,4 +1,4 @@
-import { Event } from '@sentry/nextjs';
+import { Event, Breadcrumb } from '@sentry/nextjs';
 
 const SENSITIVE_KEYS = [
   'password',
@@ -59,7 +59,7 @@ export function scrubEventData(event: Event): Event {
   }
 
   if (scrubbedEvent.breadcrumbs) {
-    scrubbedEvent.breadcrumbs = scrubbedEvent.breadcrumbs.map((crumb) => ({
+    scrubbedEvent.breadcrumbs = scrubbedEvent.breadcrumbs.map((crumb: Breadcrumb) => ({
       ...crumb,
       data: crumb.data ? scrubObject(crumb.data) : crumb.data,
     }));
