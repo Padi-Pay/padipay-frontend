@@ -38,3 +38,5 @@ jobs:
       
     - name: Build Application
       run: npm run build
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
