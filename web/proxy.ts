@@ -3,7 +3,7 @@ import { generateNonce, buildCspHeader } from '@/lib/security/csp';
 import { securityHeaders } from '@/lib/security/headers';
 
 /**
- * Next.js Edge Middleware — Security Headers & CSP.
+ * Next.js Edge Proxy — Security Headers & CSP.
  *
  * Runs on every matching request to:
  *  1. Generate a fresh cryptographic nonce.
@@ -14,7 +14,7 @@ import { securityHeaders } from '@/lib/security/headers';
  * In development the CSP is applied as `Content-Security-Policy-Report-Only`
  * so that HMR, React Fast Refresh, and error overlays are not blocked.
  */
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   const nonce = generateNonce();
   const cspHeaderValue = buildCspHeader(nonce);
 
