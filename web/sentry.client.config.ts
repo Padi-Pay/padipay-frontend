@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/nextjs';
-import type { Event } from '@sentry/nextjs';
 import { scrubEventData } from './lib/telemetry/scrubber';
 
 interface Integration {
@@ -17,7 +16,9 @@ Sentry.init({
       return integration.name !== 'CaptureConsole' && integration.name !== 'Replay';
     });
   },
-  beforeSend: (event: Event) => {
-    return scrubEventData(event);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  beforeSend: (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return scrubEventData(event) as any;
   },
 });

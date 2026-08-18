@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/nextjs';
-import type { Event } from '@sentry/nextjs';
 import { scrubEventData } from './lib/telemetry/scrubber';
 
 Sentry.init({
@@ -7,7 +6,9 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   tracesSampleRate: 0.1,
   debug: false,
-  beforeSend: (event: Event) => {
-    return scrubEventData(event);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  beforeSend: (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return scrubEventData(event) as any;
   },
 });
