@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
     "@react-oauth/google": "^0.13.5",
+    "@sentry/nextjs": "^10.70.0",
     "@tanstack/react-query": "^5.101.4",
     "@tanstack/react-query-devtools": "^5.101.4",
     "axios": "^1.18.1",

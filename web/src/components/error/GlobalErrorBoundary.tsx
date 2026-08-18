@@ -2,6 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { useGlobalStore } from '@/src/store/globalStore';
+import * as Sentry from '@sentry/nextjs';
 
 interface Props {
   children?: ReactNode;
@@ -27,6 +28,10 @@ export class GlobalErrorBoundary extends Component<Props, State> {
     if (status === 401) {
       useGlobalStore.getState().markSessionExpired();
     }
+
+    Sentry.captureException(error, {
+      contexts: { react: { componentStack: errorInfo.componentStack } },
+    });
 
     console.error('Uncaught error:', error, errorInfo);
   }
