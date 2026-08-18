@@ -9,6 +9,7 @@ export interface Escrow {
   buyerAddress: string;
   sellerAddress: string;
   actionType?: string;
+  description?: string;
   createdAt: string;
 }
 
