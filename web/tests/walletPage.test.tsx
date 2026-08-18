@@ -5,6 +5,7 @@ import WalletPage from '../app/dashboard/wallet/page';
 import { useGlobalStore } from '../src/store/globalStore';
 import { server } from './setup';
 import { http, HttpResponse } from 'msw';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('sonner', () => ({
   toast: {
@@ -12,6 +13,12 @@ vi.mock('sonner', () => ({
     error: vi.fn(),
   },
 }));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+  },
+});
 
 describe('Wallet Page', () => {
   beforeEach(() => {
@@ -25,6 +32,8 @@ describe('Wallet Page', () => {
       },
     });
 
+    queryClient.clear();
+
     server.use(
       http.get('/api/wallets/me/balance', () => {
         return HttpResponse.json({
@@ -37,12 +46,22 @@ describe('Wallet Page', () => {
           success: true,
           data: { publicKey: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ' },
         });
+      }),
+      http.get('/api/accounts/me/escrows', () => {
+        return HttpResponse.json({
+          success: true,
+          data: [],
+        });
       })
     );
   });
 
   it('renders wallet balance and public key', async () => {
-    render(<WalletPage />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <WalletPage />
+      </QueryClientProvider>
+    );
 
     await waitFor(() => {
       expect(screen.getAllByText('100.00 XLM').length).toBeGreaterThan(0);
@@ -60,7 +79,11 @@ describe('Wallet Page', () => {
       })
     );
 
-    render(<WalletPage />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <WalletPage />
+      </QueryClientProvider>
+    );
 
     // Wait for initial load
     await waitFor(() => {
@@ -89,7 +112,11 @@ describe('Wallet Page', () => {
       })
     );
 
-    render(<WalletPage />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <WalletPage />
+      </QueryClientProvider>
+    );
 
     await waitFor(() => {
       expect(screen.getAllByText('100.00 XLM').length).toBeGreaterThan(0);
@@ -117,3 +144,4 @@ describe('Wallet Page', () => {
     });
   });
 });
+

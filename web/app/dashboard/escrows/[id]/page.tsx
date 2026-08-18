@@ -1,27 +1,12 @@
 'use client';
 
-import { use, useEffect } from 'react';
+import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { CircleAlert, FileText, ShieldCheck, RefreshCw } from 'lucide-react';
-import { useApi } from '@/src/hooks/useApi';
+import { useEscrowDetails } from '@/src/hooks/queries/useEscrowQueries';
 
 interface EscrowDetailsPageProps {
   params: Promise<{ id: string }>;
-}
-
-interface EscrowDetailsResponse {
-  success: boolean;
-  message: string;
-  data: {
-    id: string;
-    amount: string;
-    asset: string | null;
-    status: string;
-    buyerAddress: string;
-    sellerAddress: string;
-    actionType: string;
-    createdAt: string;
-  };
 }
 
 export default function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
@@ -31,11 +16,7 @@ export default function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
     notFound();
   }
 
-  const { request, isLoading, data, error } = useApi<EscrowDetailsResponse>();
-
-  useEffect(() => {
-    request({ method: 'GET', url: `/api/accounts/me/escrows/${id}` });
-  }, [id, request]);
+  const { data, isLoading, error, refetch } = useEscrowDetails(id);
 
   const escrow = data?.data;
 
@@ -48,7 +29,7 @@ export default function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
             Escrow details
           </div>
           <button 
-            onClick={() => request({ method: 'GET', url: `/api/accounts/me/escrows/${id}` })}
+            onClick={() => refetch()}
             disabled={isLoading}
             className="p-2 text-foreground/50 transition hover:text-primary disabled:opacity-50"
             aria-label="Refresh details"
@@ -92,7 +73,7 @@ export default function EscrowDetailsPage({ params }: EscrowDetailsPageProps) {
                 <div className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/45">
                   {item.label}
                 </div>
-                <div className="mt-2 text-sm font-semibold text-foreground truncate" title={item.value}>{item.value}</div>
+                <div className="mt-2 text-sm font-semibold text-foreground truncate" title={item.value as string}>{item.value}</div>
               </div>
             ))}
           </div>

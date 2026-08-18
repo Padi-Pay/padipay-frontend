@@ -8,6 +8,9 @@ import { z } from 'zod';
 import { useGlobalStore, UserProfile } from '@/src/store/globalStore';
 import { apiClient } from '@/src/lib/apiClient';
 import { TextInput } from '@/components/forms/TextInput';
+import { useProfileQuery } from '@/src/hooks/queries/useProfileQuery';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export const profileSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
@@ -18,16 +21,23 @@ export type ProfileFormData = z.infer<typeof profileSchema>;
 export function ProfileView() {
   const profile = useGlobalStore((state) => state.profile);
   const setProfile = useGlobalStore((state) => state.setProfile);
+  const queryClient = useQueryClient();
 
-  const [isLoading, setIsLoading] = useState(!profile);
-  const [fetchError, setFetchError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  
+  // React Query for fetching
+  const { isLoading, error: fetchErrorRaw } = useProfileQuery();
+  
+  // Custom fetch error parsing
+  const fetchError = fetchErrorRaw 
+    ? ((fetchErrorRaw as AxiosError<{ message?: string }>).response?.data?.message || 'Failed to load profile details.')
+    : null;
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -35,74 +45,51 @@ export function ProfileView() {
     },
   });
 
+  // Keep form in sync with zustand profile
   useEffect(() => {
     if (profile?.name) {
       reset({ name: profile.name });
     }
   }, [profile?.name, reset]);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchUserProfile = async () => {
-      try {
-        setIsLoading(true);
-        setFetchError(null);
-        const response = await apiClient.get<UserProfile>('/api/users/me');
-        if (isMounted && response.data) {
-          setProfile(response.data);
-          reset({ name: response.data.name || '' });
-        }
-      } catch (err: unknown) {
-        if (isMounted) {
-          const message = err && typeof err === 'object' && 'response' in err
-            ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
-            : null;
-          setFetchError(message || 'Failed to load profile details.');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchUserProfile();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [setProfile, reset]);
-
-  const onUpdateProfile = async (data: ProfileFormData) => {
-    setFetchError(null);
-    setSuccessMessage(null);
-
-    // Save previous state for potential rollback
-    const previousProfile = useGlobalStore.getState().profile;
-
-    // 1. Optimistically update state so Header immediately reflects new name
-    const optimisticProfile: UserProfile = previousProfile
-      ? { ...previousProfile, name: data.name }
-      : { id: 'temp-id', email: '', name: data.name };
-    
-    setProfile(optimisticProfile);
-
-    try {
+  // React Query mutation for updating
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: ProfileFormData) => {
       const response = await apiClient.patch<UserProfile>('/api/users/me', data);
-      if (response.data) {
-        setProfile(response.data);
-      }
+      return response.data;
+    },
+    onMutate: async (newProfileData) => {
+      setSuccessMessage(null);
+      // We don't cancel queries or snapshot here because profile is kept in globalStore 
+      // as well as React Query. We'll optimistically update global store.
+      const previousProfile = useGlobalStore.getState().profile;
+      
+      const optimisticProfile: UserProfile = previousProfile
+        ? { ...previousProfile, name: newProfileData.name }
+        : { id: 'temp-id', email: '', name: newProfileData.name };
+      
+      setProfile(optimisticProfile);
+      return { previousProfile };
+    },
+    onSuccess: (data) => {
+      setProfile(data);
+      queryClient.setQueryData(['profile'], data);
       setSuccessMessage('Profile updated successfully');
-    } catch (err: unknown) {
-      // Rollback optimistic update on failure
-      setProfile(previousProfile);
-
-      const message = err && typeof err === 'object' && 'response' in err
-        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
-        : null;
-      setFetchError(message || 'Failed to update profile. Please try again.');
+    },
+    onError: (err, newProfileData, context) => {
+      if (context?.previousProfile) {
+        setProfile(context.previousProfile);
+      }
     }
+  });
+
+  const onUpdateProfile = (data: ProfileFormData) => {
+    updateProfileMutation.mutate(data);
   };
+  
+  const updateError = updateProfileMutation.error 
+    ? ((updateProfileMutation.error as AxiosError<{ message?: string }>).response?.data?.message || 'Failed to update profile. Please try again.')
+    : null;
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -119,7 +106,7 @@ export function ProfileView() {
       <div className="bg-surface rounded-2xl border border-outline-variant/60 p-6 sm:p-8 shadow-xs">
         <h2 className="text-lg font-semibold text-foreground mb-6">Personal Information</h2>
         
-        {isLoading ? (
+        {isLoading && !profile ? (
           <div className="flex items-center gap-2 py-8 text-foreground/70 justify-center">
             <Loader2 className="w-5 h-5 animate-spin text-primary" />
             <span>Loading profile details...</span>
@@ -129,6 +116,12 @@ export function ProfileView() {
             {fetchError && (
               <div className="p-4 rounded-xl bg-error/10 text-error text-sm">
                 {fetchError}
+              </div>
+            )}
+            
+            {updateError && (
+              <div className="p-4 rounded-xl bg-error/10 text-error text-sm">
+                {updateError}
               </div>
             )}
 
@@ -161,10 +154,10 @@ export function ProfileView() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={updateProfileMutation.isPending}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {updateProfileMutation.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
                 <span>Save Changes</span>
               </button>
             </form>
@@ -176,3 +169,4 @@ export function ProfileView() {
 }
 
 export default ProfileView;
+

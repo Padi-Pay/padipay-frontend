@@ -8,6 +8,7 @@ import { ProfileView } from '../app/dashboard/profile';
 import { useGlobalStore } from '../src/store/globalStore';
 import { server } from './setup';
 import { http, HttpResponse } from 'msw';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/dashboard/profile',
@@ -16,6 +17,12 @@ vi.mock('next/navigation', () => ({
     push: vi.fn(),
   }),
 }));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+  },
+});
 
 describe('Authenticated Application Shell', () => {
   beforeEach(() => {
@@ -29,6 +36,7 @@ describe('Authenticated Application Shell', () => {
         name: 'John Doe',
       },
     });
+    queryClient.clear();
   });
 
   it('renders initials correctly for name and email fallback', () => {
@@ -83,7 +91,11 @@ describe('Authenticated Application Shell', () => {
       })
     );
 
-    render(<ProfileView />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ProfileView />
+      </QueryClientProvider>
+    );
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
@@ -103,3 +115,4 @@ describe('Authenticated Application Shell', () => {
     expect(useGlobalStore.getState().profile?.name).toBe('John Doe');
   });
 });
+

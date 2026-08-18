@@ -1,59 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Wallet, RefreshCw, Copy, Check, History, ArrowDownRight, ArrowUpRight, ShieldCheck, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useApi } from '@/src/hooks/useApi';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { TextInput } from '@/components/forms/TextInput';
 import { CurrencyInput } from '@/components/forms/CurrencyInput';
 import { SkeletonLoader } from '@/components/ui/SkeletonLoader';
 import { withdrawalSchema, WithdrawalFormData } from '@/lib/validations/wallet.schema';
-
-interface WalletBalanceResponse {
-  success: boolean;
-  message: string;
-  data: {
-    balance: string;
-    asset: string;
-  };
-}
-
-interface WalletInfoResponse {
-  success: boolean;
-  message: string;
-  data: {
-    id: string;
-    publicKey: string;
-    createdAt: string;
-  };
-}
-
-interface Escrow {
-  id: string;
-  amount: string;
-  asset: string | null;
-  status: string;
-  createdAt: string;
-}
-
-interface EscrowsResponse {
-  success: boolean;
-  message: string;
-  data: Escrow[];
-}
+import { useWalletBalance, useWalletInfo } from '@/src/hooks/queries/useWalletQuery';
+import { useEscrows } from '@/src/hooks/queries/useEscrowQueries';
+import { useWithdrawMutation } from '@/src/hooks/mutations/useWithdrawMutation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/src/lib/apiClient';
 
 export default function WalletPage() {
-  const { request: requestBalance, isLoading: isLoadingBalance, data: balanceData } = useApi<WalletBalanceResponse>();
-  const { request: requestWallet, isLoading: isLoadingWallet, data: walletData } = useApi<WalletInfoResponse>();
-  const { request: requestFund, isLoading: isFunding } = useApi();
-  const { request: requestWithdraw, isLoading: isWithdrawing } = useApi();
-  const { request: requestEscrows, isLoading: isLoadingEscrows, data: escrowsData } = useApi<EscrowsResponse>();
+  const queryClient = useQueryClient();
+  
+  const { data: balanceData, isLoading: isLoadingBalance, refetch: refetchBalance } = useWalletBalance();
+  const { data: walletData, isLoading: isLoadingWallet, refetch: refetchWallet } = useWalletInfo();
+  const { data: escrowsData, isLoading: isLoadingEscrows, refetch: refetchEscrows } = useEscrows();
 
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  const withdrawMutation = useWithdrawMutation();
+  
+  const fundTestnetMutation = useMutation({
+    mutationFn: async (data: { walletAddress: string; amount: string; asset: string }) => {
+      const response = await apiClient.post('/api/relayer/fund', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Successfully funded testnet wallet! Balances updating...');
+      // Invalidate to fetch fresh balance
+      queryClient.invalidateQueries({ queryKey: ['wallet', 'balance'] });
+    },
+    onError: () => {
+      // Global onError handles the toast if we configured it, otherwise we could add here
+    }
+  });
 
   const {
     register,
@@ -65,15 +53,10 @@ export default function WalletPage() {
   });
 
   const fetchBalances = () => {
-    requestBalance({ method: 'GET', url: '/api/wallets/me/balance' });
-    requestWallet({ method: 'GET', url: '/api/wallets/me' });
-    requestEscrows({ method: 'GET', url: '/api/accounts/me/escrows' });
+    refetchBalance();
+    refetchWallet();
+    refetchEscrows();
   };
-
-  useEffect(() => {
-    fetchBalances();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const rawBalance = balanceData?.data?.balance || '0.00';
   const balance = Number(rawBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -91,51 +74,19 @@ export default function WalletPage() {
     }
   };
 
-  const handleFund = async () => {
+  const handleFund = () => {
     if (!publicKey) return;
-    const response = await requestFund({
-      method: 'POST',
-      url: '/api/relayer/fund',
-      data: { walletAddress: publicKey, amount: '10000', asset: 'XLM' },
-    });
-    if (response && !response.error) {
-      toast.success('Successfully funded testnet wallet! Balances updating...');
-      // Poll for balance updates since ledger closure is async
-      let attempts = 0;
-      const poll = () => {
-        if (attempts >= 2) return;
-        setTimeout(() => {
-          fetchBalances();
-          attempts++;
-          poll();
-        }, 3000);
-      };
-      poll();
-    }
+    fundTestnetMutation.mutate({ walletAddress: publicKey, amount: '10000', asset: 'XLM' });
   };
 
-  const onWithdrawSubmit = async (data: WithdrawalFormData) => {
-    const response = await requestWithdraw({
-      method: 'POST',
-      url: '/api/wallets/withdraw',
-      data,
+  const onWithdrawSubmit = (data: WithdrawalFormData) => {
+    withdrawMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success('Withdrawal initiated successfully!');
+        setIsWithdrawModalOpen(false);
+        reset();
+      }
     });
-    if (response && !response.error) {
-      toast.success('Withdrawal initiated successfully!');
-      setIsWithdrawModalOpen(false);
-      reset();
-      // Poll for balance updates since ledger closure is async
-      let attempts = 0;
-      const poll = () => {
-        if (attempts >= 2) return;
-        setTimeout(() => {
-          fetchBalances();
-          attempts++;
-          poll();
-        }, 3000);
-      };
-      poll();
-    }
   };
 
   return (
@@ -180,8 +131,8 @@ export default function WalletPage() {
               onClick={handleFund} 
               variant="secondary"
               className="bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md shadow-lg shadow-black/10 w-full sm:w-auto h-12 px-6"
-              disabled={!publicKey || isFunding}
-              isLoading={isFunding}
+              disabled={!publicKey || fundTestnetMutation.isPending}
+              isLoading={fundTestnetMutation.isPending}
             >
               <ArrowDownRight className="mr-2 h-5 w-5" />
               Fund Testnet
@@ -240,10 +191,10 @@ export default function WalletPage() {
               </div>
               <button 
                 onClick={fetchBalances}
-                disabled={isLoadingBalance}
+                disabled={isLoadingBalance || isLoadingEscrows}
                 className="rounded-full p-2 text-foreground/40 transition-colors hover:bg-surface-container hover:text-primary disabled:opacity-50"
               >
-                <RefreshCw className={`h-4 w-4 ${isLoadingBalance ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 ${isLoadingBalance || isLoadingEscrows ? 'animate-spin' : ''}`} />
               </button>
             </div>
             <div className="grid gap-4">
@@ -317,14 +268,14 @@ export default function WalletPage() {
               type="button"
               variant="secondary"
               onClick={() => setIsWithdrawModalOpen(false)}
-              disabled={isWithdrawing}
+              disabled={withdrawMutation.isPending}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               variant="primary"
-              isLoading={isWithdrawing}
+              isLoading={withdrawMutation.isPending}
             >
               Confirm Withdrawal
             </Button>

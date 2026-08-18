@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRightLeft, Wallet, ListChecks, ShieldCheck, ArrowRight, Zap, History, Activity } from 'lucide-react';
 import { useGlobalStore } from '@/src/store/globalStore';
-import { useApi } from '@/src/hooks/useApi';
+import { useEscrows } from '@/src/hooks/queries/useEscrowQueries';
 
 const quickActions = [
   {
@@ -39,28 +38,10 @@ const quickActions = [
   },
 ];
 
-interface Escrow {
-  id: string;
-  amount: string;
-  asset: string | null;
-  status: string;
-  createdAt: string;
-}
-
-interface EscrowsResponse {
-  success: boolean;
-  message: string;
-  data: Escrow[];
-}
-
 export default function DashboardHomePage() {
   const profile = useGlobalStore((state) => state.profile);
   const firstName = profile?.name ? profile.name.split(' ')[0] : null;
-  const { request: requestEscrows, isLoading, data } = useApi<EscrowsResponse>();
-
-  useEffect(() => {
-    requestEscrows({ method: 'GET', url: '/api/accounts/me/escrows' });
-  }, [requestEscrows]);
+  const { data, isLoading } = useEscrows();
 
   const recentEscrows = data?.data?.slice(0, 4) || [];
 

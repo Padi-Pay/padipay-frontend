@@ -1,31 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRightLeft, PlusCircle, RefreshCw } from 'lucide-react';
-import { useApi } from '@/src/hooks/useApi';
-
-interface Escrow {
-  id: string;
-  amount: string;
-  asset: string | null;
-  status: string;
-  buyerAddress: string;
-  sellerAddress: string;
-}
-
-interface EscrowsResponse {
-  success: boolean;
-  message: string;
-  data: Escrow[];
-}
+import { useEscrows } from '@/src/hooks/queries/useEscrowQueries';
 
 export default function EscrowsPage() {
-  const { request, isLoading, data, error } = useApi<EscrowsResponse>();
-
-  useEffect(() => {
-    request({ method: 'GET', url: '/api/accounts/me/escrows' });
-  }, [request]);
+  const { data, isLoading, error, refetch } = useEscrows();
 
   const escrows = data?.data || [];
 
@@ -41,7 +21,7 @@ export default function EscrowsPage() {
 
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => request({ method: 'GET', url: '/api/accounts/me/escrows' })}
+            onClick={() => refetch()}
             disabled={isLoading}
             className="rounded-xl border border-outline-variant/50 p-3 text-foreground/60 transition hover:bg-surface-container hover:text-primary disabled:opacity-50"
             aria-label="Refresh escrows"
