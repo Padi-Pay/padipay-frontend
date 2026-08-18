@@ -1,6 +1,10 @@
 import * as Sentry from '@sentry/nextjs';
-import type { Event, Integration } from '@sentry/nextjs';
+import type { Event } from '@sentry/nextjs';
 import { scrubEventData } from './lib/telemetry/scrubber';
+
+interface Integration {
+  name: string;
+}
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
