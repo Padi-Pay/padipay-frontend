@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import type { Event } from '@sentry/nextjs';
 import { scrubEventData } from './lib/telemetry/scrubber';
 
 Sentry.init({
@@ -6,7 +7,7 @@ Sentry.init({
   enabled: process.env.NODE_ENV === 'production',
   tracesSampleRate: 0.1,
   debug: false,
-  beforeSend: (event: any) => {
+  beforeSend: (event: Event) => {
     return scrubEventData(event);
   },
 });
