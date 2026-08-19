@@ -3,6 +3,12 @@
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
 import { FeatureFlags, defaultFlags, FeatureFlagsSchema } from '@/lib/featureFlags.schema';
 
+declare global {
+  interface Window {
+    __clearFeatureFlags: () => void;
+  }
+}
+
 export const FeatureFlagContext = createContext<FeatureFlags>(defaultFlags);
 
 export function FeatureFlagProvider({ children }: { children: ReactNode }) {
@@ -49,6 +55,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     // Ensure final state strictly matches schema and fills defaults
     try {
       const finalFlags = FeatureFlagsSchema.parse(currentFlags);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFlags(finalFlags);
     } catch (e) {
       console.error('Failed to validate feature flags state:', e);
@@ -56,7 +63,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     }
 
     // 3. Expose dev helper globally
-    (window as any).__clearFeatureFlags = () => {
+    window.__clearFeatureFlags = () => {
       localStorage.removeItem('padipay_ff_overrides');
       console.log('Feature flag overrides cleared. Reload the page to apply defaults.');
     };
