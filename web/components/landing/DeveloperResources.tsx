@@ -18,7 +18,7 @@ const resources = [
 
 export function DeveloperResources() {
   return (
-    <section className="py-24" style={{ backgroundColor: "#f1f0ff" }}>
+    <section className="py-24 bg-surface-container">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Top Section: Copy & Metrics */}
@@ -30,7 +30,7 @@ export function DeveloperResources() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-4xl font-extrabold tracking-tight text-[#111C2D] mb-6"
+              className="text-4xl font-extrabold tracking-tight text-foreground mb-6"
             >
               Built with Developers, for the World.
             </motion.h2>
@@ -39,7 +39,7 @@ export function DeveloperResources() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-lg text-[#3E4A3D] leading-relaxed"
+              className="text-lg text-on-surface-variant leading-relaxed"
             >
               PadiPay is 100% open source. From our smart contracts to our bot gateway, every line of code is designed to be audited, improved, and utilized by the community.
             </motion.p>
@@ -91,10 +91,10 @@ export function DeveloperResources() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-white border border-[#BDCABA] rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-[#006B2C] hover:shadow-md transition-all group cursor-pointer"
+                className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:border-primary hover:shadow-md transition-all group cursor-pointer"
               >
-                <resource.icon className="w-6 h-6 text-[#006B2C] group-hover:scale-110 transition-transform duration-300" />
-                <span className="text-[#111C2D] font-medium text-sm">
+                <resource.icon className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+                <span className="text-foreground font-medium text-sm">
                   {resource.name}
                 </span>
               </motion.div>

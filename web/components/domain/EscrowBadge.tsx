@@ -13,18 +13,18 @@ const statusConfig: Record<
 > = {
 	pending: {
 		label: "Pending",
-		containerClass: "bg-amber-50 text-amber-700 border border-amber-200",
-		dotClass: "bg-amber-500",
+		containerClass: "bg-status-pending-muted text-status-pending-foreground border border-status-pending/20",
+		dotClass: "bg-status-pending",
 	},
 	locked: {
 		label: "Locked",
-		containerClass: "bg-indigo-50 text-indigo-700 border border-indigo-200",
-		dotClass: "bg-indigo-500",
+		containerClass: "bg-status-locked-muted text-status-locked-foreground border border-status-locked/20",
+		dotClass: "bg-status-locked",
 	},
 	resolved: {
 		label: "Resolved",
-		containerClass: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-		dotClass: "bg-emerald-500",
+		containerClass: "bg-status-resolved-muted text-status-resolved-foreground border border-status-resolved/20",
+		dotClass: "bg-status-resolved",
 	},
 }
 

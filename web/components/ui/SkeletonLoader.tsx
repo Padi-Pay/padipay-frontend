@@ -33,7 +33,7 @@ export function SkeletonLoader({
 				variantClasses[variant],
 				className
 			)}>
-			<div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+			<div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-surface-container-lowest/40 to-transparent" />
 			<style>{`
 				@keyframes shimmer {
 					100% {

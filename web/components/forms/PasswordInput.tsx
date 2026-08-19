@@ -10,10 +10,10 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       <button
         type="button"
         onClick={() => setShowPassword(!showPassword)}
-        className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        className="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md"
         aria-label={showPassword ? "Hide password" : "Show password"}
       >
-        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
       </button>
     );
 

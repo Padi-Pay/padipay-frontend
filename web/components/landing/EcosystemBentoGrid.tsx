@@ -119,14 +119,14 @@ export function EcosystemBentoGrid({ initialStats = {} }: { initialStats?: Recor
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true }}
 							transition={{ duration: 0.5, delay: index * 0.1 }}
-							className="block relative bg-white p-8 rounded-3xl border border-outline-variant shadow-sm hover:shadow-md transition-all group overflow-hidden cursor-pointer"
+							className="block relative bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant shadow-sm hover:shadow-md transition-all group overflow-hidden cursor-pointer"
 						>
 							{/* Hardware-accelerated Spotlight Effect */}
 							<div
 								className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover/container:opacity-100"
 								style={{
 									opacity,
-									background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(22,163,74,0.06), transparent 40%)`,
+									background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, hsl(var(--primary) / 0.06), transparent 40%)`,
 								}}
 							/>
 

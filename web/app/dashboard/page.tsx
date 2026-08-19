@@ -11,9 +11,9 @@ const quickActions = [
     description: 'Create a secure trade intent instantly.',
     href: '/dashboard/escrows/create',
     icon: ListChecks,
-    color: 'from-green-500 to-emerald-400',
-    bg: 'bg-green-50',
-    text: 'text-green-600',
+    color: 'from-primary to-primary/80',
+    bg: 'bg-primary-container',
+    text: 'text-on-primary-container',
     delay: 'delay-[100ms]',
   },
   {
@@ -21,9 +21,9 @@ const quickActions = [
     description: 'View your XLM and connected assets.',
     href: '/dashboard/wallet',
     icon: Wallet,
-    color: 'from-blue-500 to-indigo-400',
-    bg: 'bg-blue-50',
-    text: 'text-blue-600',
+    color: 'from-secondary to-secondary/80',
+    bg: 'bg-secondary-container',
+    text: 'text-on-secondary-container',
     delay: 'delay-[200ms]',
   },
   {
@@ -31,9 +31,9 @@ const quickActions = [
     description: 'Manage and review pending trades.',
     href: '/dashboard/escrows',
     icon: ArrowRightLeft,
-    color: 'from-purple-500 to-fuchsia-400',
-    bg: 'bg-purple-50',
-    text: 'text-purple-600',
+    color: 'from-tertiary to-tertiary/80',
+    bg: 'bg-tertiary-container',
+    text: 'text-on-tertiary-container',
     delay: 'delay-[300ms]',
   },
 ];
@@ -49,7 +49,7 @@ export default function DashboardHomePage() {
     <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Welcome Hero Section */}
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/90 via-primary to-emerald-600 p-8 text-white shadow-2xl shadow-primary/20 sm:p-10">
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/90 via-primary to-primary/80 p-8 text-on-primary shadow-2xl shadow-primary/20 sm:p-10">
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
         <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-black/10 blur-3xl"></div>
         
@@ -58,14 +58,14 @@ export default function DashboardHomePage() {
             <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
               Welcome back{firstName ? `, ${firstName}` : ''}
             </h1>
-            <p className="mt-4 text-base font-medium text-white/80 sm:text-lg">
+            <p className="mt-4 text-base font-medium text-on-primary/80 sm:text-lg">
               You are securely connected to the PadiPay decentralized relayer. Your wallet is active and ready for secure escrows.
             </p>
           </div>
           
           <div className="mt-6 hidden md:mt-0 md:block">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md shadow-inner ring-1 ring-white/30">
-              <ShieldCheck className="h-8 w-8 text-white" />
+              <ShieldCheck className="h-8 w-8 text-on-primary" />
             </div>
           </div>
         </div>
@@ -79,9 +79,9 @@ export default function DashboardHomePage() {
             <Link
               key={action.title}
               href={action.href}
-              className={`group relative overflow-hidden rounded-[1.75rem] border border-outline-variant/50 bg-white/80 p-6 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-${action.text.split('-')[1]}/30 animate-in fade-in slide-in-from-bottom-8 fill-mode-both ${action.delay}`}
+              className={`group relative overflow-hidden rounded-[1.75rem] border border-outline-variant/50 bg-surface-container-lowest/80 p-6 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-primary/30 animate-in fade-in slide-in-from-bottom-8 fill-mode-both ${action.delay}`}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-surface-container-lowest/40 to-transparent pointer-events-none"></div>
               <div className="relative z-10 flex flex-col h-full justify-between">
                 <div>
                   <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${action.bg} ${action.text} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
@@ -104,7 +104,7 @@ export default function DashboardHomePage() {
       {/* Activity & System Status */}
       <section className="grid gap-6 lg:grid-cols-[1fr_300px]">
         {/* Recent Activity */}
-        <div className="rounded-[2rem] border border-outline-variant/50 bg-white/60 p-6 shadow-sm backdrop-blur-lg sm:p-8 animate-in fade-in slide-in-from-bottom-8 delay-500 fill-mode-both">
+        <div className="rounded-[2rem] border border-outline-variant/50 bg-surface-container-lowest/60 p-6 shadow-sm backdrop-blur-lg sm:p-8 animate-in fade-in slide-in-from-bottom-8 delay-500 fill-mode-both">
           <div className="flex items-center justify-between border-b border-outline-variant/50 pb-5">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container text-foreground/70">
@@ -148,7 +148,7 @@ export default function DashboardHomePage() {
                   className="group flex items-center justify-between rounded-xl p-3 transition-colors hover:bg-surface-container/50"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-50 text-purple-600 transition-transform group-hover:scale-110">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-variant text-foreground transition-transform group-hover:scale-110">
                       <ListChecks className="h-4 w-4" />
                     </div>
                     <div>
@@ -164,7 +164,7 @@ export default function DashboardHomePage() {
                     <p className="text-sm font-bold text-foreground">
                       {escrow.amount} {escrow.asset || 'XLM'}
                     </p>
-                    <p className={`text-xs font-semibold mt-1 ${escrow.status === 'PENDING' ? 'text-orange-500' : escrow.status === 'SUCCESS' ? 'text-green-500' : 'text-primary'}`}>
+                    <p className={`text-xs font-semibold mt-1 ${escrow.status === 'PENDING' ? 'text-status-pending-foreground' : escrow.status === 'SUCCESS' ? 'text-status-resolved-foreground' : 'text-primary'}`}>
                       {escrow.status}
                     </p>
                   </div>
@@ -175,24 +175,24 @@ export default function DashboardHomePage() {
         </div>
 
         {/* System Status */}
-        <aside className="rounded-[2rem] border border-outline-variant/50 bg-[linear-gradient(135deg,rgba(22,163,74,0.05),rgba(255,255,255,0.8))] p-6 shadow-sm backdrop-blur-lg animate-in fade-in slide-in-from-bottom-8 delay-[600ms] fill-mode-both">
+        <aside className="rounded-[2rem] border border-outline-variant/50 bg-surface-container-lowest/80 p-6 shadow-sm backdrop-blur-lg animate-in fade-in slide-in-from-bottom-8 delay-[600ms] fill-mode-both">
           <div className="flex items-center gap-3">
             <Activity className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-bold text-foreground">System Status</h2>
           </div>
           
           <div className="mt-6 space-y-4">
-            <div className="flex items-center justify-between rounded-xl bg-white/80 p-3 shadow-sm ring-1 ring-black/5">
+            <div className="flex items-center justify-between rounded-xl bg-surface-container-lowest/80 p-3 shadow-sm ring-1 ring-outline-variant">
               <span className="text-sm font-medium text-foreground/70">Relayer API</span>
-              <span className="flex items-center gap-2 text-xs font-bold text-green-600">
-                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span className="flex items-center gap-2 text-xs font-bold text-status-resolved-foreground">
+                <span className="h-2 w-2 rounded-full bg-status-resolved animate-pulse"></span>
                 Operational
               </span>
             </div>
-            <div className="flex items-center justify-between rounded-xl bg-white/80 p-3 shadow-sm ring-1 ring-black/5">
+            <div className="flex items-center justify-between rounded-xl bg-surface-container-lowest/80 p-3 shadow-sm ring-1 ring-outline-variant">
               <span className="text-sm font-medium text-foreground/70">Stellar Horizon</span>
-              <span className="flex items-center gap-2 text-xs font-bold text-green-600">
-                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span className="flex items-center gap-2 text-xs font-bold text-status-resolved-foreground">
+                <span className="h-2 w-2 rounded-full bg-status-resolved animate-pulse"></span>
                 Testnet Active
               </span>
             </div>

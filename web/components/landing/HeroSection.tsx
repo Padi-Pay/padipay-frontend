@@ -23,7 +23,7 @@ export function HeroSection() {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5 }}
-					className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 text-primary-700 rounded-full text-sm font-medium mb-8 border border-primary/20 shadow-sm">
+					className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 text-on-primary-container rounded-full text-sm font-medium mb-8 border border-primary/20 shadow-sm">
 					<ShieldCheck className="w-4 h-4" />
 					Open Source Trust Infrastructure
 				</motion.div>
@@ -53,13 +53,13 @@ export function HeroSection() {
 					className="flex flex-col sm:flex-row justify-center gap-4">
 					<Link
 						href="/#technical-architecture"
-						className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary/90 shadow-sm transition-all hover:scale-105 active:scale-95">
+						className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-on-primary bg-primary hover:bg-primary/90 shadow-sm transition-all hover:scale-105 active:scale-95">
 						Explore Architecture <ArrowRight className="ml-2 w-5 h-5" />
 					</Link>
 					<Link
 						href="https://github.com/padi-pay"
 						target="_blank"
-						className="inline-flex items-center justify-center px-8 py-4 border border-border text-base font-semibold rounded-xl text-foreground bg-white hover:bg-black/5 shadow-sm transition-all">
+						className="inline-flex items-center justify-center px-8 py-4 border border-border text-base font-semibold rounded-xl text-foreground bg-surface-container-lowest hover:bg-foreground/5 shadow-sm transition-all">
 						<Code2 className="mr-2 w-5 h-5" /> View GitHub
 					</Link>
 				</motion.div>

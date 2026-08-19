@@ -121,7 +121,7 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 							type="button"
 							onClick={onClose}
 							aria-label="Close dialog"
-							className="p-2 -mr-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+							className="p-2 -mr-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
 							<X className="h-5 w-5" aria-hidden="true" />
 						</button>
 					</div>

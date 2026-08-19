@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
 import { useGlobalStore } from '@/src/store/globalStore';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface HeaderProps {
   onToggleMobileSidebar?: () => void;
@@ -58,6 +59,7 @@ export function Header({ onToggleMobileSidebar }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-3">
+        <ThemeToggle />
         <Link
           href="/dashboard/profile"
           className="flex items-center gap-3 p-1.5 rounded-xl hover:bg-surface-container transition-colors group"
@@ -71,7 +73,7 @@ export function Header({ onToggleMobileSidebar }: HeaderProps) {
               className="w-9 h-9 rounded-full object-cover border border-outline-variant shadow-xs"
             />
           ) : (
-            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm shadow-xs group-hover:bg-primary group-hover:text-white transition-colors">
+            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm shadow-xs group-hover:bg-primary group-hover:text-on-primary transition-colors">
               {initials}
             </div>
           )}
