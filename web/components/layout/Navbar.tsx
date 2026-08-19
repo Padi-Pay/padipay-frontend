@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Menu, X } from "lucide-react"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
 
 export function Navbar() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -68,6 +69,7 @@ export function Navbar() {
 
 						{/* Right Side Actions (Desktop) & Mobile Toggle */}
 						<div className="flex items-center gap-4">
+							<ThemeToggle />
 							<Link
 								href="https://github.com/padi-pay"
 								target="_blank"
