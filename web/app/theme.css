@@ -1,45 +1,178 @@
 /* theme.css - Stitch Design System Variables */
 
 :root {
-  --background: #f9f9ff;
-  --on-background: #111c2d;
+  /* HSL Channel values for Tailwind v4 opacity support */
+  --background: 240 33% 99%;
+  --on-background: 217 50% 12%;
   
-  --surface: #f9f9ff;
-  --surface-dim: #cfdaf2;
-  --surface-bright: #f9f9ff;
+  --surface: 240 33% 99%;
+  --surface-dim: 222 55% 85%;
+  --surface-bright: 240 33% 99%;
   
-  --surface-container-lowest: #ffffff;
-  --surface-container-low: #f0f3ff;
-  --surface-container: #e7eeff;
-  --surface-container-high: #dee8ff;
-  --surface-container-highest: #d8e3fb;
+  --surface-container-lowest: 0 0% 100%;
+  --surface-container-low: 228 100% 97%;
+  --surface-container: 225 100% 96%;
+  --surface-container-high: 222 100% 94%;
+  --surface-container-highest: 220 80% 91%;
   
-  --on-surface: #111c2d;
-  --on-surface-variant: #3e4a3d;
-  --surface-variant: #d8e3fb;
+  --on-surface: 222 47% 17%;
+  --on-surface-variant: 114 10% 27%;
+  --surface-variant: 220 80% 91%;
   
-  /* Brand Colors from Design System Image */
-  --primary: #16A34A;
-  --primary-container: #DCFCE7;
-  --on-primary: #FFFFFF;
-  --on-primary-container: #14532D;
+  --primary: 142 76% 36%;
+  --primary-container: 141 79% 93%;
+  --on-primary: 0 0% 100%;
+  --on-primary-container: 143 61% 20%;
 
-  --secondary: #F59E0B;
-  --secondary-container: #FEF3C7;
-  --on-secondary: #FFFFFF;
-  --on-secondary-container: #78350F;
+  --secondary: 38 92% 50%;
+  --secondary-container: 48 96% 89%;
+  --on-secondary: 0 0% 100%;
+  --on-secondary-container: 26 78% 27%;
 
-  --tertiary: #E85F81;
-  --tertiary-container: #FCE7F3;
-  --on-tertiary: #FFFFFF;
-  --on-tertiary-container: #831843;
+  --tertiary: 346 76% 64%;
+  --tertiary-container: 326 78% 95%;
+  --on-tertiary: 0 0% 100%;
+  --on-tertiary-container: 336 65% 31%;
 
-  --neutral: #1E293B;
-  --on-surface: #1E293B; /* Mapping Neutral to main text color */
+  --neutral: 222 47% 17%;
   
-  --outline: #94A3B8;
-  --outline-variant: #CBD5E1;
+  --outline: 215 16% 65%;
+  --outline-variant: 214 32% 85%;
+
+  /* Semantic tokens */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --ring: 142 76% 36%;
+  --input: 214 32% 85%;
+
+  /* Status Colors */
+  --status-pending: 38 92% 50%;
+  --status-pending-muted: 48 96% 89%;
+  --status-pending-foreground: 26 78% 27%;
+  --status-locked: 239 84% 67%;
+  --status-locked-muted: 226 100% 95%;
+  --status-locked-foreground: 224 64% 33%;
+  --status-resolved: 160 84% 39%;
+  --status-resolved-muted: 152 81% 96%;
+  --status-resolved-foreground: 164 86% 16%;
+}
+
+.dark {
+  --background: 222 47% 11%;
+  --on-background: 210 40% 98%;
   
-  /* We purposefully do NOT include a prefers-color-scheme: dark 
-     to enforce the bright, trustworthy institutional feel dictated by the Stitch design. */
+  --surface: 222 47% 11%;
+  --surface-dim: 222 47% 9%;
+  --surface-bright: 222 40% 16%;
+  
+  --surface-container-lowest: 222 47% 8%;
+  --surface-container-low: 222 47% 13%;
+  --surface-container: 222 47% 15%;
+  --surface-container-high: 222 40% 18%;
+  --surface-container-highest: 222 40% 22%;
+  
+  --on-surface: 210 40% 98%;
+  --on-surface-variant: 215 20% 68%;
+  --surface-variant: 222 47% 15%;
+  
+  --primary: 142 70% 45%;
+  --primary-container: 143 61% 20%;
+  --on-primary: 0 0% 100%;
+  --on-primary-container: 141 79% 93%;
+
+  --secondary: 38 92% 50%;
+  --secondary-container: 26 78% 27%;
+  --on-secondary: 0 0% 100%;
+  --on-secondary-container: 48 96% 89%;
+
+  --tertiary: 346 76% 64%;
+  --tertiary-container: 336 65% 31%;
+  --on-tertiary: 0 0% 100%;
+  --on-tertiary-container: 326 78% 95%;
+
+  --neutral: 210 40% 98%;
+  
+  --outline: 215 20% 35%;
+  --outline-variant: 215 20% 25%;
+
+  /* Semantic tokens */
+  --destructive: 0 72% 65%;
+  --destructive-foreground: 0 0% 100%;
+  --muted: 222 40% 18%;
+  --muted-foreground: 215 20% 55%;
+  --ring: 142 70% 45%;
+  --input: 215 20% 25%;
+
+  /* Status Colors */
+  --status-pending: 38 92% 50%;
+  --status-pending-muted: 26 78% 27%;
+  --status-pending-foreground: 48 96% 89%;
+  --status-locked: 239 84% 67%;
+  --status-locked-muted: 224 64% 33%;
+  --status-locked-foreground: 226 100% 95%;
+  --status-resolved: 160 84% 39%;
+  --status-resolved-muted: 164 86% 16%;
+  --status-resolved-foreground: 152 81% 96%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: 222 47% 11%;
+    --on-background: 210 40% 98%;
+    
+    --surface: 222 47% 11%;
+    --surface-dim: 222 47% 9%;
+    --surface-bright: 222 40% 16%;
+    
+    --surface-container-lowest: 222 47% 8%;
+    --surface-container-low: 222 47% 13%;
+    --surface-container: 222 47% 15%;
+    --surface-container-high: 222 40% 18%;
+    --surface-container-highest: 222 40% 22%;
+    
+    --on-surface: 210 40% 98%;
+    --on-surface-variant: 215 20% 68%;
+    --surface-variant: 222 47% 15%;
+    
+    --primary: 142 70% 45%;
+    --primary-container: 143 61% 20%;
+    --on-primary: 0 0% 100%;
+    --on-primary-container: 141 79% 93%;
+
+    --secondary: 38 92% 50%;
+    --secondary-container: 26 78% 27%;
+    --on-secondary: 0 0% 100%;
+    --on-secondary-container: 48 96% 89%;
+
+    --tertiary: 346 76% 64%;
+    --tertiary-container: 336 65% 31%;
+    --on-tertiary: 0 0% 100%;
+    --on-tertiary-container: 326 78% 95%;
+
+    --neutral: 210 40% 98%;
+    
+    --outline: 215 20% 35%;
+    --outline-variant: 215 20% 25%;
+
+    /* Semantic tokens */
+    --destructive: 0 72% 65%;
+    --destructive-foreground: 0 0% 100%;
+    --muted: 222 40% 18%;
+    --muted-foreground: 215 20% 55%;
+    --ring: 142 70% 45%;
+    --input: 215 20% 25%;
+
+    /* Status Colors */
+    --status-pending: 38 92% 50%;
+    --status-pending-muted: 26 78% 27%;
+    --status-pending-foreground: 48 96% 89%;
+    --status-locked: 239 84% 67%;
+    --status-locked-muted: 224 64% 33%;
+    --status-locked-foreground: 226 100% 95%;
+    --status-resolved: 160 84% 39%;
+    --status-resolved-muted: 164 86% 16%;
+    --status-resolved-foreground: 152 81% 96%;
+  }
 }
