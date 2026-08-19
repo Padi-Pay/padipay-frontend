@@ -1,19 +1,19 @@
-name: Web CI
+name: Web Test
 
 on:
   push:
     branches: [ "main" ]
     paths:
       - 'web/**'
-      - '.github/workflows/web-ci.yml'
+      - '.github/workflows/web-test.yml'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'web/**'
-      - '.github/workflows/web-ci.yml'
+      - '.github/workflows/web-test.yml'
 
 jobs:
-  build-and-lint:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -33,10 +33,5 @@ jobs:
     - name: Install Dependencies
       run: npm ci
       
-    - name: Run Linter
-      run: npm run lint
-      
-    - name: Build Application
-      run: npm run build
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    - name: Run Tests
+      run: npm run test
