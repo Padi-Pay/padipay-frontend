@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppChrome } from "@/components/layout/AppChrome";
@@ -26,15 +25,13 @@ export const metadata: Metadata = {
   description: "PadiPay provides WhatsApp-powered escrow for everyday trade.",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
-
   return (
-    <html lang="en" className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scroll-pt-24`} suppressHydrationWarning nonce={nonce}>
+    <html lang="en" className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scroll-pt-24`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col selection:bg-primary/20 selection:text-primary">
         <GlobalErrorBoundary>
           <Providers>
