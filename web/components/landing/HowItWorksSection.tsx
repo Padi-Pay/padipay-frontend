@@ -52,9 +52,9 @@ export function HowItWorksSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="bg-[#F8FAFC] border border-[#CBD5E1] p-8 rounded-3xl hover:border-primary/50 transition-colors group flex flex-col text-left"
+              className="bg-surface-container-low border border-outline-variant p-8 rounded-3xl hover:border-primary/50 transition-colors group flex flex-col text-left"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#DCFCE7] flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform duration-300">
                 <step.icon className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">{step.title}</h3>
