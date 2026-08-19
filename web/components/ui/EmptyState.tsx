@@ -24,12 +24,12 @@ export function EmptyState({
   secondaryAction,
 }: EmptyStateProps) {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-outline-variant/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.88),rgba(241,240,255,0.92))] px-6 py-12 shadow-[0_24px_70px_rgba(17,28,45,0.08)] backdrop-blur sm:px-10 sm:py-16">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(22,163,74,0.08),transparent_42%),radial-gradient(circle_at_bottom_right,rgba(232,95,129,0.08),transparent_36%)]" />
+    <section className="relative overflow-hidden rounded-[2rem] border border-outline-variant/50 bg-surface-container-lowest/80 px-6 py-12 shadow-[0_24px_70px_rgba(17,28,45,0.08)] backdrop-blur sm:px-10 sm:py-16">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.08),transparent_42%),radial-gradient(circle_at_bottom_right,hsl(var(--tertiary)/0.08),transparent_36%)]" />
 
       <div className="relative mx-auto grid max-w-5xl gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="space-y-6">
-          <div className="inline-flex rounded-full border border-outline-variant/60 bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-foreground/60">
+          <div className="inline-flex rounded-full border border-outline-variant/60 bg-surface-container-lowest/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-foreground/60">
             {eyebrow}
           </div>
 
@@ -45,7 +45,7 @@ export function EmptyState({
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               href={primaryAction.href}
-              className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+              className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3.5 text-sm font-semibold text-on-primary shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               {primaryAction.label}
             </Link>
@@ -53,7 +53,7 @@ export function EmptyState({
             {secondaryAction ? (
               <Link
                 href={secondaryAction.href}
-                className="inline-flex items-center justify-center rounded-2xl border border-outline-variant bg-white/80 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+                className="inline-flex items-center justify-center rounded-2xl border border-outline-variant bg-surface-container-lowest/80 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-container-lowest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 {secondaryAction.label}
               </Link>
