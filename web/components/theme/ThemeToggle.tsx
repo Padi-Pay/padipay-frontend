@@ -15,6 +15,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
   // Avoid hydration mismatch by waiting for mount
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 
