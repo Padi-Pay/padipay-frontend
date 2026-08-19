@@ -81,14 +81,14 @@ export function Navbar() {
 							</Link>
 							<Link 
 								href="/register"
-								className="hidden md:flex justify-center items-center bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+								className="hidden md:flex justify-center items-center bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
 								Get Started
 							</Link>
 
 							{/* Mobile Menu Toggle Button */}
 							<button
 								type="button"
-								className="md:hidden p-2 -mr-2 text-foreground/70 hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded-lg"
+								className="md:hidden p-2 -mr-2 text-foreground/70 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
 								onClick={toggleMenu}
 								aria-expanded={isMobileMenuOpen}
 								aria-controls="mobile-menu"
@@ -121,10 +121,10 @@ export function Navbar() {
 					isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
 				}`}>
 				<div className="flex items-center justify-between p-4 border-b border-outline-variant/30 h-16">
-					<span className="font-bold text-[#111C2D]">Menu</span>
+					<span className="font-bold text-foreground">Menu</span>
 					<button
 						type="button"
-						className="p-2 -mr-2 text-foreground/70 hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded-lg"
+						className="p-2 -mr-2 text-foreground/70 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
 						onClick={closeMenu}
 						aria-label="Close mobile menu">
 						<X className="w-6 h-6" aria-hidden="true" />
@@ -168,13 +168,13 @@ export function Navbar() {
 						<Link
 							href="/login"
 							onClick={closeMenu}
-							className="w-full flex justify-center items-center bg-surface-container/50 text-foreground border border-outline-variant/60 px-4 py-3 rounded-lg text-base font-bold hover:bg-surface-variant transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary">
+							className="w-full flex justify-center items-center bg-surface-container/50 text-foreground border border-outline-variant/60 px-4 py-3 rounded-lg text-base font-bold hover:bg-surface-variant transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
 							Login
 						</Link>
 						<Link
 							href="/register"
 							onClick={closeMenu}
-							className="w-full flex justify-center items-center bg-primary text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+							className="w-full flex justify-center items-center bg-primary text-on-primary px-4 py-3 rounded-lg text-base font-bold hover:bg-primary/90 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
 							Get Started
 						</Link>
 					</div>

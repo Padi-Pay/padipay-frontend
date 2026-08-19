@@ -93,11 +93,11 @@ export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
               aria-current={active ? 'page' : undefined}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 active
-                  ? 'bg-primary text-white font-semibold shadow-sm'
+                  ? 'bg-primary text-on-primary font-semibold shadow-sm'
                   : 'text-foreground/70 hover:text-foreground hover:bg-surface-container'
               }`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : ''}`} />
+              <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-on-primary' : ''}`} />
               <span>{item.name}</span>
             </Link>
           );
@@ -109,7 +109,7 @@ export function Sidebar({ onCloseMobileSidebar, onLogout }: SidebarProps) {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium text-error hover:bg-error/10 transition-colors"
+          className="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
           data-testid="logout-btn"
         >
           <LogOut className="w-4 h-4 shrink-0" />
