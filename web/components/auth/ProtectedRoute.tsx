@@ -3,15 +3,20 @@
 import { ReactNode, Suspense, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { readPersistedAuthToken, useGlobalStore } from '@/src/store/globalStore';
+import { toast } from 'sonner';
+import { FeatureFlagName } from '@/lib/featureFlags.schema';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 
 interface ProtectedRouteProps {
   children: ReactNode;
+  requiredFeatureFlag?: FeatureFlagName;
 }
 
-function ProtectedRouteInner({ children }: ProtectedRouteProps) {
+function ProtectedRouteInner({ children, requiredFeatureFlag }: ProtectedRouteProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const flags = useFeatureFlags();
 
   const isAuthenticated = useGlobalStore((state) => state.isAuthenticated);
   const isHydrated = useGlobalStore((state) => state.isHydrated);
@@ -33,19 +38,32 @@ function ProtectedRouteInner({ children }: ProtectedRouteProps) {
       router.replace(`/login?redirect=${encodeURIComponent(currentPath || '/dashboard')}`);
       return;
     }
-  }, [isAuthenticated, isHydrated, pathname, router, searchParams, sessionExpired]);
+
+    if (requiredFeatureFlag && !flags[requiredFeatureFlag]) {
+      toast.error('Feature Unavailable', {
+        description: 'This feature is currently disabled or unavailable.',
+      });
+      router.replace('/dashboard');
+      return;
+    }
+  }, [isAuthenticated, isHydrated, pathname, router, searchParams, sessionExpired, requiredFeatureFlag, flags]);
 
   if (!isHydrated || !isAuthenticated || sessionExpired) {
+    return <div className="min-h-[40vh]" aria-hidden="true" />;
+  }
+
+  // Prevent flicker if feature flag rejects the route
+  if (requiredFeatureFlag && !flags[requiredFeatureFlag]) {
     return <div className="min-h-[40vh]" aria-hidden="true" />;
   }
 
   return <>{children}</>;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, requiredFeatureFlag }: ProtectedRouteProps) {
   return (
     <Suspense fallback={<div className="min-h-[40vh]" aria-hidden="true" />}>
-      <ProtectedRouteInner>{children}</ProtectedRouteInner>
+      <ProtectedRouteInner requiredFeatureFlag={requiredFeatureFlag}>{children}</ProtectedRouteInner>
     </Suspense>
   );
 }

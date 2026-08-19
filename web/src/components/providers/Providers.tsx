@@ -6,6 +6,7 @@ import { SessionExpiryRedirect } from '@/components/auth/SessionExpiryRedirect';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryProvider } from './QueryProvider';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { FeatureFlagProvider } from './FeatureFlagProvider';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -22,11 +23,13 @@ export function Providers({ children }: ProvidersProps) {
         enableSystem
         disableTransitionOnChange
       >
-        <QueryProvider>
-          <Toaster position="top-right" richColors />
-          <SessionExpiryRedirect />
-          {children}
-        </QueryProvider>
+        <FeatureFlagProvider>
+          <QueryProvider>
+            <Toaster position="top-right" richColors />
+            <SessionExpiryRedirect />
+            {children}
+          </QueryProvider>
+        </FeatureFlagProvider>
       </ThemeProvider>
     </GoogleOAuthProvider>
   );
