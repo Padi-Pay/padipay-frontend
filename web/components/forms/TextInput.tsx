@@ -14,17 +14,17 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     const errorId = `${inputId}-error`;
     const hintId = `${inputId}-hint`;
 
-    const baseClasses = "flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors";
+    const baseClasses = "flex h-10 w-full rounded-md border bg-surface-container-lowest px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 transition-colors";
     const stateClasses = error
-      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+      ? "border-destructive focus-visible:border-destructive focus-visible:ring-destructive"
+      : "border-input focus-visible:border-ring focus-visible:ring-ring";
     
     // Adjust padding if there is a suffix (like an icon)
     const paddingClasses = suffix ? "pr-10" : "";
 
     return (
       <div className="flex w-full flex-col space-y-1.5">
-        <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
+        <label htmlFor={inputId} className="text-sm font-medium text-foreground">
           {label}
         </label>
         <div className="relative">
@@ -46,12 +46,12 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           )}
         </div>
         {hint && !error && (
-          <p id={hintId} className="text-sm text-gray-500">
+          <p id={hintId} className="text-sm text-muted-foreground">
             {hint}
           </p>
         )}
         {error && (
-          <span id={errorId} className="text-sm text-red-500" role="alert">
+          <span id={errorId} className="text-sm text-destructive" role="alert">
             {error}
           </span>
         )}
