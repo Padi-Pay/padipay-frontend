@@ -4,8 +4,8 @@
   "description": "WhatsApp bot gateway for PadiPay - a decentralized Web2.5 escrow service",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node init && node src/app.js",
+    "dev": "node init && nodemon src/app.js"
   },
   "keywords": [
     "padipay",
