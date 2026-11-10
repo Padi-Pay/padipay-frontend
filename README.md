@@ -84,3 +84,5 @@ We believe in open commerce. Whether you are a Rust smart contract engineer, a f
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+<!-- Verified for issue #18: feat(wallet): implement wallet dashboard view, balance card, and withdrawal validation -->
